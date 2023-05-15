@@ -5,6 +5,7 @@ import java.util.Map;
 public class FieldValidationException extends RuntimeException {
 
     private Map field;
+
     public FieldValidationException(Map field) {
         super();
         this.field = field;

@@ -12,7 +12,28 @@ import static com.pragma.powerup.plazamicroservice.configuration.Constants.FIELD
 public class FieldValidation {
 
 
+    public static void restaurantValidate(Restaurant restaurant){
+        Map<String, String> fieldValidation = new HashMap<>();
 
+        if (nameIsValid(restaurant.getName())) {
+            fieldValidation.put(FIELD_NAME, FIELD_VALIDATION);
+        }
+
+
+        if (fieldValidation.size()>0) {
+            throw new FieldValidationException(fieldValidation);
+        }
+
+    }
+
+    public static boolean nameIsValid(String name){
+
+        if ( utils.isNumber(name) ) {
+            return false;
+        }
+        return true;
+
+    }
 
 
     public static boolean phoneIsValid(String phone){

@@ -36,7 +36,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
             throw new RoleNotAllowedForCreationException();
         }
 
-        //FieldValidation.restaurantValidate(restaurant);
+        FieldValidation.restaurantValidate(restaurant);
         restaurantPersistencePort.saveRestaurant(restaurant);
 
     }
