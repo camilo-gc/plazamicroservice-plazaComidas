@@ -8,22 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-//@Transactional
+@Transactional
 public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
 
     @Override
     public void saveRestaurant(Restaurant restaurant) {
-        /*
-        if (userRepository.findByDni(restaurant.getDni()).isPresent()) {
-            throw new UserAlreadyExistsException();
-        }
-
-        roleRepository.findById(restaurant.getRole().getId()).orElseThrow(RoleNotFoundException::new);
-        restaurant.setPassword(passwordEncoder.encode(restaurant.getPassword()));
-
-         */
         restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
     }
 

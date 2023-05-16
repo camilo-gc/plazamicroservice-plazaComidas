@@ -1,9 +1,9 @@
 package com.pragma.powerup.plazamicroservice.domain.spi;
 
-import java.util.Map;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 
 public interface IUserApiPersistencePort {
 
-    Map findOwnerById(Long idOwner);
+    UserResponseDto findOwnerById(Long id, String authorizationHeader);
 
 }

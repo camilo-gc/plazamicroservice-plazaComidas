@@ -42,20 +42,14 @@ public class ControllerAdvisor {
     }
 
 
-    @ExceptionHandler(MailAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleMailAlreadyExistsException(
-            MailAlreadyExistsException mailAlreadyExistsException) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, MAIL_ALREADY_EXISTS_MESSAGE));
-    }
-
-
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleUserAlreadyExistsException(
             UserAlreadyExistsException userAlreadyExistsException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_ALREADY_EXISTS_MESSAGE));
     }
+
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleUserNotFoundException(
             UserNotFoundException userNotFoundException) {
@@ -64,11 +58,10 @@ public class ControllerAdvisor {
     }
 
 
-
     @ExceptionHandler(FieldValidationException.class)
     public ResponseEntity<Map<String, String>> handleFieldValidationException(
             FieldValidationException fieldValidationException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.unmodifiableMap(fieldValidationException.getField()));
     }
 
@@ -79,6 +72,7 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_FOUND_MESSAGE));
     }
+
 
     @ExceptionHandler(RoleNotAllowedForCreationException.class)
     public ResponseEntity<Map<String, String>> handleRoleNotAllowedForCreationException(

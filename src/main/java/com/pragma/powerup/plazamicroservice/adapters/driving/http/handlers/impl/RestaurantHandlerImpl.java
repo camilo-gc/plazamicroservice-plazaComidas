@@ -5,6 +5,7 @@ import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IRest
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,10 +17,8 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
 
 
     @Override
-    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto) {
-        //User user = restaurantRequestMapper.toUser(restaurantRequestDto);
-        //user.getRole().setId( Constants.OWNER_ROLE_ID );
-        restaurantServicePort.saveRestaurant(restaurantRequestMapper.toRestaurant(restaurantRequestDto));
+    public void saveRestaurant(RestaurantRequestDto restaurantRequestDto, String authorizationHeader) {
+        restaurantServicePort.saveRestaurant( restaurantRequestMapper.toRestaurant( restaurantRequestDto ), authorizationHeader );
     }
 
 }

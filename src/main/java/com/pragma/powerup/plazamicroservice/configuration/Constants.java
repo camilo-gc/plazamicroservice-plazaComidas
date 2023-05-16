@@ -12,11 +12,10 @@ public class Constants {
     public static final Long EMPLOYEE_ROLE_ID = 3L;
     public static final Long CLIENT_ROLE_ID = 4L;
     public static final String RESPONSE_MESSAGE_KEY = "message";
-    public static final String USER_CREATED_MESSAGE = "User created successfully";
+    public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
-    public static final String MAIL_ALREADY_EXISTS_MESSAGE = "A person with that mail already exists";
-    public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create users with this role";
+    public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create restaurant with this role";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the dni provided";
     public static final String USER_NOT_FOUND_MESSAGE = "No user found with the role provided";
     public static final String SWAGGER_TITLE_MESSAGE = "Plaza API Pragma Power Up";
@@ -28,12 +27,6 @@ public class Constants {
 
     public static final String FIELD_VALIDATION = "The field value is not valid";
     public static final String FIELD_NAME = "name";
-    public static final String FIELD_DNI = "dni";
-    public static final String FIELD_PHONE = "phone";
-    public static final String FIELD_BIRTHDATE = "birthDate";
-    public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_PASSWORD = "password";
-    public static final String FIELD_ID_ROLE = "id_role";
 
 
 }
