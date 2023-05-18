@@ -2,14 +2,23 @@ package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter;
 
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiPersistencePort;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpServerErrorException;
+
+import java.net.ConnectException;
 
 
 @RequiredArgsConstructor
+@CommonsLog
 public class UserApiAdapter implements IUserApiPersistencePort {
 
     private final IUserApiRepository userApiRepository;
@@ -17,22 +26,34 @@ public class UserApiAdapter implements IUserApiPersistencePort {
     @Override
     public UserResponseDto findOwnerById(Long id, String authorizationHeader) {
 
-        ResponseEntity<UserResponseDto> responseEntity = userApiRepository.findById( id, authorizationHeader );//orElseThrow(UserNotFoundException::new);
+        ResponseEntity<UserResponseDto> responseEntity = null;
 
-        if (responseEntity.getStatusCode().equals( 401 )) {
-            //TODO: crear exception de sin permisos
-            //throw new HttpClientErrorException;
-            System.err.println(responseEntity.getStatusCode());
-        }
-        if (responseEntity.getStatusCode().equals( 404 )) {
-            throw new OwnerNotFoundException();
-        }
-        if (responseEntity.getStatusCode().is5xxServerError()) {
-            //TODO: crear exception de error servidor
-            //throw new HttpServerErrorException;
-            System.err.println(responseEntity.getStatusCode());
+        try {
+
+            responseEntity = userApiRepository.findById( id, authorizationHeader );
+
+        } catch ( FeignException e ){
+
+            if ( e.status() == 401 ) {
+                log.error( "401 -> Find Unauthorized" );
+                throw new UnauthorizedOwnerValidationException();
+            }
+            if ( e.status() == 404 ) {
+                log.error( "404 -> Owner not found" );
+                throw new OwnerNotFoundException();
+            }
+            if ( e.status() == 500 ) {
+                log.error("500 -> UserApi internal error");
+                throw new HttpServerErrorException(HttpStatusCode.valueOf(e.status()));
+            }
+            if ( e.status() == -1 ) {
+                log.error( "-1 -> UserApi not available" );
+                throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         }
 
         return responseEntity.getBody();
+        
     }
 }

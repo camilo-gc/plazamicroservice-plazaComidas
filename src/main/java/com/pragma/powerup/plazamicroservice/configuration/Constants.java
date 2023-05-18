@@ -15,9 +15,11 @@ public class Constants {
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
-    public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create restaurant with this role";
+    public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create restaurant with this owner";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the dni provided";
-    public static final String USER_NOT_FOUND_MESSAGE = "No user found with the role provided";
+    public static final String OWNER_NOT_FOUND_MESSAGE = "Owner not found";
+    public static final String UNAUTHORIZED_OWNER_VALIDATION_MESSAGE = "not authorized for owner validation";
+    public static final String INTERNAL_ERROR_OWNER_VALIDATION_MESSAGE = "internal error validating owner";
     public static final String SWAGGER_TITLE_MESSAGE = "Plaza API Pragma Power Up";
     public static final String SWAGGER_DESCRIPTION_MESSAGE = "Plaza microservice";
     public static final String SWAGGER_VERSION_MESSAGE = "1.0.0";

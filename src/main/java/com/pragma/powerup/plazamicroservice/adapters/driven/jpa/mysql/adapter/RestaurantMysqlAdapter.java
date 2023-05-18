@@ -14,8 +14,10 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
     private final IRestaurantEntityMapper restaurantEntityMapper;
 
     @Override
-    public void saveRestaurant(Restaurant restaurant) {
-        restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant));
+    public Restaurant saveRestaurant(Restaurant restaurant) {
+        return restaurantEntityMapper.toRestaurant(
+                restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant))
+        );
     }
 
 

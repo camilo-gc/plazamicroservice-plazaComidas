@@ -23,17 +23,17 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
 
-    public void saveRestaurant(Restaurant restaurant, String authorizationHeader) {
+    public Restaurant saveRestaurant(Restaurant restaurant, String authorizationHeader) {
+
+        FieldValidation.restaurantValidate(restaurant);
 
         UserResponseDto owner = userApiPersistencePort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
 
-
-        if ( !owner.getId_role().equals(Constants.OWNER_ROLE_ID)) {
+        if ( !owner.getId_role().equals(Constants.OWNER_ROLE_ID) ) {
             throw new RoleNotAllowedForCreationException();
         }
 
-        FieldValidation.restaurantValidate(restaurant);
-        restaurantPersistencePort.saveRestaurant(restaurant);
+        return restaurantPersistencePort.saveRestaurant(restaurant);
 
     }
 

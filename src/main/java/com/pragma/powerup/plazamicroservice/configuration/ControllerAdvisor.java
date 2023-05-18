@@ -9,6 +9,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,14 +51,6 @@ public class ControllerAdvisor {
     }
 
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleUserNotFoundException(
-            UserNotFoundException userNotFoundException) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_FOUND_MESSAGE));
-    }
-
-
     @ExceptionHandler(FieldValidationException.class)
     public ResponseEntity<Map<String, String>> handleFieldValidationException(
             FieldValidationException fieldValidationException) {
@@ -70,7 +63,7 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleOwnerNotFoundException(
             OwnerNotFoundException ownerNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, USER_NOT_FOUND_MESSAGE));
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, OWNER_NOT_FOUND_MESSAGE));
     }
 
 
@@ -79,5 +72,21 @@ public class ControllerAdvisor {
             RoleNotAllowedForCreationException roleNotAllowedForCreationException) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ROLE_NOT_ALLOWED_MESSAGE));
+    }
+
+
+    @ExceptionHandler(UnauthorizedOwnerValidationException.class)
+    public ResponseEntity<Map<String, String>> handleUnauthorizedOwnerValidationException(
+            UnauthorizedOwnerValidationException unauthorizedOwnerValidationException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, UNAUTHORIZED_OWNER_VALIDATION_MESSAGE));
+    }
+
+
+    @ExceptionHandler(HttpServerErrorException.class)
+    public ResponseEntity<Map<String, String>> handleRoleNotAllowedForCreationException(
+            HttpServerErrorException httpServerErrorException) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, INTERNAL_ERROR_OWNER_VALIDATION_MESSAGE));
     }
 }
