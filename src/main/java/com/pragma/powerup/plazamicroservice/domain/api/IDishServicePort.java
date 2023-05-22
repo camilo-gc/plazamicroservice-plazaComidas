@@ -4,6 +4,6 @@ import com.pragma.powerup.plazamicroservice.domain.model.Dish;
 
 public interface IDishServicePort {
 
-    void saveDish(Dish dish);
+    Dish saveDish(Dish dish);
 
 }

@@ -19,10 +19,10 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public void saveDish(Dish dish) {
+    public Dish saveDish(Dish dish) {
 
         dish.setActive(true);
-        dishPersistencePort.saveDish(dish);
+        return dishPersistencePort.saveDish(dish);
 
     }
 
