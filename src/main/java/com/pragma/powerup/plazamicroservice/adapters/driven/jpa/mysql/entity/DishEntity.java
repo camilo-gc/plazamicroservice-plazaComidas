@@ -7,19 +7,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "restaurants")
+@Table(name = "dishes")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class RestaurantEntity {
+public class DishEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String address;
-    private Long id_owner;
-    private String phone;
-    private String url_logo;
-    private String nit;
+    @ManyToOne
+    @JoinColumn(name = "id_category")
+    private CategoryEntity categoryEntity;
+    private String description;
+    private String price;
+    @ManyToOne
+    @JoinColumn(name = "id_restaurant")
+    private RestaurantEntity restaurantEntity;
+    private String url_image;
+    private Boolean active;
 }

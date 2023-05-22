@@ -31,4 +31,5 @@ public class Constants {
     public static final String FIELD_NAME = "name";
 
 
+    public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
 }
