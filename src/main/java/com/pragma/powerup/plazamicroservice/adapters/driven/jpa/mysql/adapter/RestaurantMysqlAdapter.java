@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter;
 
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
+
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
 
@@ -18,6 +21,12 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
         return restaurantEntityMapper.toRestaurant(
                 restaurantRepository.save(restaurantEntityMapper.toEntity(restaurant))
         );
+    }
+
+    @Override
+    public Restaurant getRestaurantById(Long id) {
+        RestaurantEntity restaurantEntity = restaurantRepository.findById(id).orElseThrow(RestaurantNotFoundException::new);
+        return restaurantEntityMapper.toRestaurant(restaurantEntity);
     }
 
 

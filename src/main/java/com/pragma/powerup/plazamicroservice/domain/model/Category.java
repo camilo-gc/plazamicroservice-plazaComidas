@@ -4,12 +4,12 @@ public class Category {
 
     private Long id;
     private String name;
-    private String details;
+    private String description;
 
-    public Category(Long id, String name, String details) {
+    public Category(Long id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.details = details;
+        this.description = description;
     }
 
     public Long getId() {
@@ -28,11 +28,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getDetails() {
-        return details;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

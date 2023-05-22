@@ -45,7 +45,7 @@ class RestaurantUseCaseTest {
 
 
     @Test
-    public void saveRestaurantFindOwnerException(){
+    void saveRestaurantFindOwnerException(){
 
         String token = "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
 
@@ -80,7 +80,7 @@ class RestaurantUseCaseTest {
 
 
     @Test
-    public void saveRestaurantSuccessful(){
+    void saveRestaurantSuccessful(){
 
         String token = "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
         Restaurant restaurantReq = new Restaurant( null, "Pare&coma", "av 0", 2L,

@@ -5,6 +5,7 @@ import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.Re
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.UserApiAdapter;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IUserApiRepository;
@@ -29,6 +30,7 @@ public class BeanConfiguration {
     private final IUserApiRepository userApiRepository;
     private final IDishRepository dishRepository;
     private final IDishEntityMapper dishEntityMapper;
+    private final ICategoryRepository categoryRepository;
 
 
     @Bean
@@ -47,7 +49,6 @@ public class BeanConfiguration {
     }
 
 
-
     @Bean
     public IDishServicePort dishServicePort() {
         return new DishUseCase(dishPersistencePort());
@@ -55,7 +56,9 @@ public class BeanConfiguration {
 
     @Bean
     public IDishPersistencePort dishPersistencePort() {
-        return new DishMysqlAdapter(dishRepository, dishEntityMapper);
+        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper);
     }
+
+
 
 }
