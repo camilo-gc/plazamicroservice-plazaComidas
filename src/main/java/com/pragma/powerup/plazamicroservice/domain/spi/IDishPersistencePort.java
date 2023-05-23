@@ -6,4 +6,5 @@ public interface IDishPersistencePort {
 
     Dish saveDish(Dish dish);
 
+    Dish updateDish(Dish dish);
 }

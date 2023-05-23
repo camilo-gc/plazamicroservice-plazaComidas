@@ -32,7 +32,10 @@ public class Constants {
 
 
     public static final String RESTAURANT_NOT_FOUND_MESSAGE = "Restaurant not found";
+
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";
+    public static final String DISH_NOT_FOUND_MESSAGE = "Dish not found";
+    public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
 
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
 

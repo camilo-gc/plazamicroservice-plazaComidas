@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
@@ -32,5 +33,17 @@ public class DishMysqlAdapter implements IDishPersistencePort {
         );
     }
 
+    @Override
+    public Dish updateDish(Dish dishReq) {
+
+
+        Dish dish = dishEntityMapper.toDish(dishRepository.findById(dishReq.getId()).orElseThrow(DishNotFoundException::new));
+        dish.setDescription(dishReq.getDescription());
+        dish.setPrice(dishReq.getPrice());
+
+        return dishEntityMapper.toDish(
+                dishRepository.save(dishEntityMapper.toEntity(dish))
+        );
+    }
 
 }

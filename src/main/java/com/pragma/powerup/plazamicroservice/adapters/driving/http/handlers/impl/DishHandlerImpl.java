@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IDishHandler;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IDishRequestMapper;
 import com.pragma.powerup.plazamicroservice.domain.api.IDishServicePort;
@@ -18,6 +19,11 @@ public class DishHandlerImpl implements IDishHandler {
     @Override
     public void saveDish(DishRequestDto dishRequestDto) {
         dishServicePort.saveDish( dishRequestMapper.toDish( dishRequestDto ) );
+    }
+
+    @Override
+    public void updateDish(DishUpdateRequestDto dishUpdateRequestDto) {
+        dishServicePort.updateDish( dishRequestMapper.toDish( dishUpdateRequestDto ) );
     }
 
 }

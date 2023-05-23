@@ -1,9 +1,8 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishRequestDto;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.domain.model.Dish;
-import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -18,4 +17,5 @@ public interface IDishRequestMapper {
     @Mapping(target = "urlImage", source = "url_image")
     Dish toDish(DishRequestDto dishRequestDto);
 
+    Dish toDish(DishUpdateRequestDto dishUpdateRequestDto);
 }
