@@ -1,4 +1,4 @@
-package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions;
+package com.pragma.powerup.plazamicroservice.domain.exceptions;
 
 public class RoleNotAllowedForCreationException extends RuntimeException {
     public RoleNotAllowedForCreationException() {

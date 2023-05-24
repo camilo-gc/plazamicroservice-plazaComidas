@@ -1,7 +1,7 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;

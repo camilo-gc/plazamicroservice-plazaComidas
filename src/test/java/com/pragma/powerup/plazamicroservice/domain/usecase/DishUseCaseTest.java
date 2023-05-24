@@ -65,7 +65,6 @@ class DishUseCaseTest {
     }
 
 
-    //TODO: updateDishTest
     @Test
     void updateDishNotFoundException(){
 

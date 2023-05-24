@@ -14,6 +14,7 @@ public class Constants {
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
+    public static final String WRONG_CREDENTIALS_MESSAGE = "Wrong credentials";
     public static final String NO_DATA_FOUND_MESSAGE = "No data found for the requested petition";
     public static final String ROLE_NOT_ALLOWED_MESSAGE = "No permission granted to create restaurant with this owner";
     public static final String USER_ALREADY_EXISTS_MESSAGE = "A user already exists with the dni provided";

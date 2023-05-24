@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/restaurant")
@@ -35,8 +36,9 @@ public class RestaurantRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/new")//TODO: debe recibir el toket de autenticacion
     public ResponseEntity<Map<String, String>> saveRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequestDto,
-                                                              @RequestHeader("Authorization") String authorizationHeader) {
-        restaurantHandler.saveRestaurant(restaurantRequestDto, authorizationHeader);
+                                                              @RequestHeader HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
+        restaurantHandler.saveRestaurant(restaurantRequestDto, token);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
     }
