@@ -12,6 +12,7 @@ import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositori
 import com.pragma.powerup.plazamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IDishPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.usecase.DishUseCase;
@@ -19,7 +20,6 @@ import com.pragma.powerup.plazamicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,6 +31,7 @@ public class BeanConfiguration {
     private final IDishRepository dishRepository;
     private final IDishEntityMapper dishEntityMapper;
     private final ICategoryRepository categoryRepository;
+    private final IJwtProviderConfigurationPort jwtProviderPort;
 
 
     @Bean
@@ -51,12 +52,12 @@ public class BeanConfiguration {
 
     @Bean
     public IDishServicePort dishServicePort() {
-        return new DishUseCase(dishPersistencePort());
+        return new DishUseCase( dishPersistencePort(), restaurantPersistencePort(), jwtProviderPort );
     }
 
     @Bean
     public IDishPersistencePort dishPersistencePort() {
-        return new DishMysqlAdapter(dishRepository, categoryRepository, restaurantRepository, dishEntityMapper);
+        return new DishMysqlAdapter(dishRepository, categoryRepository, dishEntityMapper);
     }
 
 

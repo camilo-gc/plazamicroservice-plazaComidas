@@ -39,8 +39,7 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/new")
     public ResponseEntity<Map<String, String>> saveDish(@Valid @RequestBody DishRequestDto dishRequestDto, @RequestHeader HttpHeaders headers) {
-        log.info("saveDish: token -> " + headers.get("Authorization").get(0).substring(7));
-        dishHandler.saveDish(dishRequestDto);
+        dishHandler.saveDish(dishRequestDto, headers.get("Authorization").get(0).substring(7));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_CREATED_MESSAGE));
     }
@@ -54,8 +53,9 @@ public class DishRestController {
                     @ApiResponse(responseCode = "403", description = "Owner not allowed for dish update",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody DishUpdateRequestDto dishUpdateRequestDto) {
-        dishHandler.updateDish(dishUpdateRequestDto);
+    public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody DishUpdateRequestDto dishUpdateRequestDto,
+                                                          @RequestHeader HttpHeaders headers) {
+        dishHandler.updateDish(dishUpdateRequestDto, headers.get("Authorization").get(0).substring(7));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }

@@ -5,7 +5,7 @@ import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.Di
 
 public interface IDishHandler {
 
-    void saveDish(DishRequestDto dishRequestDto);
+    void saveDish( DishRequestDto dishRequestDto, String token );
 
-    void updateDish(DishUpdateRequestDto dishUpdateRequestDto);
+    void updateDish( DishUpdateRequestDto dishUpdateRequestDto, String token );
 }

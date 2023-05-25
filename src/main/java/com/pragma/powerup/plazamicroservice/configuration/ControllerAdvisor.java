@@ -2,6 +2,7 @@ package com.pragma.powerup.plazamicroservice.configuration;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,4 +118,13 @@ public class ControllerAdvisor {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_NOT_FOUND_MESSAGE));
     }
+
+    @ExceptionHandler(OwnerNotAuthorizedException.class)
+    public ResponseEntity<Map<String, String>> handleOwnerNotAuthorizedException(
+            OwnerNotAuthorizedException ownerNotAuthorizedException) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, OWNER_NOT_AUTHORIZED_MESSAGE));
+    }
+
+
 }

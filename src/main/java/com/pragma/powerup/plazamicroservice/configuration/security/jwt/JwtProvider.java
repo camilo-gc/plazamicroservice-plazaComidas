@@ -2,6 +2,7 @@ package com.pragma.powerup.plazamicroservice.configuration.security.jwt;
 
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.PrincipalUser;
+import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.extern.apachecommons.CommonsLog;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Component
 @CommonsLog
-public class JwtProvider {
+public class JwtProvider implements IJwtProviderConfigurationPort {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -31,9 +32,17 @@ public class JwtProvider {
         return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
     }
 
+    public String getRoleFromToken(String token){
+
+        List<String> role = (List<String> )Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().get("roles");
+        return role.get(0);
+
+    }
+
     public String getIdFromToken(String token) {
         return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().get("id").toString();
     }
+
 
     public boolean validateToken(String token) {
         try {
@@ -54,17 +63,17 @@ public class JwtProvider {
     }
 
     public UserDetails loadPrincipalUser(String token){
+
         String id = getIdFromToken(token);
         String userName = getUserNameFromToken(token);
-
 
         return PrincipalUser.build(id, userName, getAuthorities(token));
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities(String token) {
 
-        List<String> role = (List<String> )Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().get("roles");
-        SimpleGrantedAuthority simpleAuthorities = new SimpleGrantedAuthority(role.get(0));
+        String role = getRoleFromToken(token);
+        SimpleGrantedAuthority simpleAuthorities = new SimpleGrantedAuthority(role);
 
         return Collections.singletonList(simpleAuthorities);
     }

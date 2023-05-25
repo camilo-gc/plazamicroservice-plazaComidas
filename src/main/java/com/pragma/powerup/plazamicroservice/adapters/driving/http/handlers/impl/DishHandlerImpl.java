@@ -17,13 +17,13 @@ public class DishHandlerImpl implements IDishHandler {
 
 
     @Override
-    public void saveDish(DishRequestDto dishRequestDto) {
-        dishServicePort.saveDish( dishRequestMapper.toDish( dishRequestDto ) );
+    public void saveDish(DishRequestDto dishRequestDto, String token) {
+        dishServicePort.saveDish( dishRequestMapper.toDish( dishRequestDto ), token );
     }
 
     @Override
-    public void updateDish(DishUpdateRequestDto dishUpdateRequestDto) {
-        dishServicePort.updateDish( dishRequestMapper.toDish( dishUpdateRequestDto ) );
+    public void updateDish( DishUpdateRequestDto dishUpdateRequestDto, String token ) {
+        dishServicePort.updateDish( dishRequestMapper.toDish( dishUpdateRequestDto ), token );
     }
 
 }
