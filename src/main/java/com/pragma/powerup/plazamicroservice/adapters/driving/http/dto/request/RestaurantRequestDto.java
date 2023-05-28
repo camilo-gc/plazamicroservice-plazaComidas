@@ -17,7 +17,6 @@ public class RestaurantRequestDto {
     private String address;
 
     @NotBlank
-    //@Digits(integer = 1, fraction = 0)
     @Pattern(regexp = "^[1-9]\\d*$")
     private String id_owner;
 

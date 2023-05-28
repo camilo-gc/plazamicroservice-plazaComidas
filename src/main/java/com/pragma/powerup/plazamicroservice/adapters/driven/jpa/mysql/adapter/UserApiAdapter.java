@@ -5,7 +5,7 @@ import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
-import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
@@ -14,12 +14,10 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 
-import java.net.ConnectException;
-
 
 @RequiredArgsConstructor
 @CommonsLog
-public class UserApiAdapter implements IUserApiPersistencePort {
+public class UserApiAdapter implements IUserApiFeignPort {
 
     private final IUserApiRepository userApiRepository;
 

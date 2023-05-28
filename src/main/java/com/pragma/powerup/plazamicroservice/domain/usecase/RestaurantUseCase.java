@@ -7,27 +7,26 @@ import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
-import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import com.pragma.powerup.plazamicroservice.domain.utils.FieldValidation;
 
 
 public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
-    private final IUserApiPersistencePort userApiPersistencePort;
+    private final IUserApiFeignPort userApiFeignPort;
 
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserApiPersistencePort userApiPersistencePort) {
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserApiFeignPort userApiFeignPort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
-        this.userApiPersistencePort = userApiPersistencePort;
+        this.userApiFeignPort = userApiFeignPort;
     }
-
 
     public Restaurant saveRestaurant(Restaurant restaurant, String authorizationHeader) {
 
         FieldValidation.restaurantValidate(restaurant);
 
-        UserResponseDto owner = userApiPersistencePort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
+        UserResponseDto owner = userApiFeignPort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
 
         if ( !owner.getId_role().equals(Constants.OWNER_ROLE_ID) ) {
             throw new RoleNotAllowedForCreationException();
@@ -36,5 +35,10 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return restaurantPersistencePort.saveRestaurant(restaurant);
 
     }
+
+    public Restaurant getRestaurantById(Long id) {
+        return restaurantPersistencePort.findRestaurantById( id );
+    }
+
 
 }

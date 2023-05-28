@@ -16,7 +16,6 @@ public class DishUseCase implements IDishServicePort {
 
     private final IDishPersistencePort dishPersistencePort;
     private final IJwtProviderConfigurationPort jwtProviderConfigurationPort;
-
     private final IRestaurantPersistencePort restaurantPersistencePort;
 
 
@@ -33,7 +32,7 @@ public class DishUseCase implements IDishServicePort {
     public Dish saveDish( Dish dish, String token ) {
 
         Long idRestaurant = dish.getRestaurant().getId();
-        Restaurant restaurant = restaurantPersistencePort.getRestaurantById( idRestaurant );
+        Restaurant restaurant = restaurantPersistencePort.findRestaurantById( idRestaurant );
         Long idOwner = restaurant.getIdOwner();
         String idUser = jwtProviderConfigurationPort.getIdFromToken(token);
 
@@ -50,7 +49,7 @@ public class DishUseCase implements IDishServicePort {
     public Dish updateDish(Dish dish, String token) {
 
         Long idRestaurant = dish.getRestaurant().getId();
-        Restaurant restaurant = restaurantPersistencePort.getRestaurantById( idRestaurant );
+        Restaurant restaurant = restaurantPersistencePort.findRestaurantById( idRestaurant );
         Long idOwner = restaurant.getIdOwner();
         String idUser = jwtProviderConfigurationPort.getIdFromToken(token);
 

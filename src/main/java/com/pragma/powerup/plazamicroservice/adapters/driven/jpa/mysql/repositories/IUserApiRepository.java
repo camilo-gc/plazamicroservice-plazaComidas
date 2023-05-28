@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "userApi", url = "${feign.userApi.url}")
 public interface IUserApiRepository {
 
-    //TODO: interceptor
     @GetMapping("/user/{id}")
     ResponseEntity<UserResponseDto> findById(@PathVariable("id") Long id, @RequestHeader("Authorization") String authorizationHeader);
 

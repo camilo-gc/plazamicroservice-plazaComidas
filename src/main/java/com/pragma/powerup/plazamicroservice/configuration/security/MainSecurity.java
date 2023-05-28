@@ -40,6 +40,7 @@ public class MainSecurity {
                 .authorizeRequests(requests -> requests
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/restaurant/new").hasRole("ADMIN")
+                        .requestMatchers("/restaurant/{id}").hasAnyRole("ADMIN", "OWNER")
                         .requestMatchers("/dish/**").hasRole("OWNER")
                         //hasAnyRole("ADMIN", "USER")
                         //hasRole("ADMIN")

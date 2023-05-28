@@ -24,10 +24,9 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
     }
 
     @Override
-    public Restaurant getRestaurantById(Long id) {
+    public Restaurant findRestaurantById(Long id) {
         RestaurantEntity restaurantEntity = restaurantRepository.findById(id).orElseThrow(RestaurantNotFoundException::new);
         return restaurantEntityMapper.toRestaurant(restaurantEntity);
     }
-
 
 }

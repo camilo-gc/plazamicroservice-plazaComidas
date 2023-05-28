@@ -31,7 +31,6 @@ public class Constants {
     public static final String FIELD_VALIDATION = "The field value is not valid";
     public static final String FIELD_NAME = "name";
 
-
     public static final String RESTAURANT_NOT_FOUND_MESSAGE = "Restaurant not found";
 
     public static final String DISH_CREATED_MESSAGE = "Dish created successfully";

@@ -14,7 +14,7 @@ import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
-import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import com.pragma.powerup.plazamicroservice.domain.usecase.DishUseCase;
 import com.pragma.powerup.plazamicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IUserApiPersistencePort userApiPersistencePort(){
+    public IUserApiFeignPort userApiPersistencePort(){
         return new UserApiAdapter(userApiRepository);
     }
 
