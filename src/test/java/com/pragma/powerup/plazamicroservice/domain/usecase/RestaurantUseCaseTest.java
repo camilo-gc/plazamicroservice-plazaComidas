@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
@@ -54,7 +55,7 @@ class RestaurantUseCaseTest {
     }
 
     @Test
-    public void saveRestaurantOwnerNotFoundException(){
+    void saveRestaurantOwnerNotFoundException(){
 
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 0L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987");
@@ -65,7 +66,7 @@ class RestaurantUseCaseTest {
     }
 
     @Test
-    public void saveRestaurantFindOwnerInternalError(){
+    void saveRestaurantFindOwnerInternalError(){
 
         String token = "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
@@ -101,6 +102,26 @@ class RestaurantUseCaseTest {
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
         assertNotNull(restaurantServicePort.saveRestaurant(restaurant, "token"));
 
+    }
+
+    @Test
+    void getUserNotFound() {
+
+        Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
+                "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
+        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById(anyLong());
+        assertThrows(RestaurantNotFoundException.class, () -> restaurantServicePort.getRestaurantById(anyLong()));
+
+    }
+
+    @Test
+    void getUserByIdSuccessful() {
+
+        Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
+                "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
+
+        when(restaurantPersistencePort.findRestaurantById(anyLong())).thenReturn(restaurant);
+        assertNotNull(restaurantServicePort.getRestaurantById(anyLong()));
     }
 
 }

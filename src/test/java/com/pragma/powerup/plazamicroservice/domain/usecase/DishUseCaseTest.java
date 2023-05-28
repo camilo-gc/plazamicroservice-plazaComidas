@@ -45,7 +45,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
         Dish dish = new Dish( null, "asd", category, "asd", 1L, restaurant, "asd", null );
 
-        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).getRestaurantById(dish.getRestaurant().getId());
+        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById(dish.getRestaurant().getId());
         assertThrows(RestaurantNotFoundException.class, ()-> dishServicePort.saveDish(dish, "token"));
 
     }
@@ -58,7 +58,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
 
         Dish dish = new Dish( null, "", category, "", 1L, restaurant, "", true );
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("6");
 
         assertThrows(OwnerNotAuthorizedException.class, ()-> dishServicePort.saveDish(dish, "token"));
@@ -73,7 +73,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
         Dish dish = new Dish( 20L, "asd", category, "asd", 1L, restaurant, "asd", true );
 
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
         doThrow(CategoryNotFoundException.class).when(dishPersistencePort).saveDish(dish);
         assertThrows(CategoryNotFoundException.class, ()-> dishServicePort.saveDish(dish, "token"));
@@ -88,7 +88,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
         Dish dish = new Dish( 20L, "asd", category, "asd", 1L, restaurant, "asd", true );
 
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
         when(dishPersistencePort.saveDish(dish)).thenReturn(dish);
         assertNotNull(dishServicePort.saveDish(dish, "token"));
@@ -104,7 +104,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
         Dish dish = new Dish( null, "asd", category, "asd", 1L, restaurant, "asd", null );
 
-        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).getRestaurantById(dish.getRestaurant().getId());
+        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById(dish.getRestaurant().getId());
         assertThrows(RestaurantNotFoundException.class, ()-> dishServicePort.updateDish(dish, "token"));
 
     }
@@ -117,7 +117,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
 
         Dish dish = new Dish( null, "", category, "", 1L, restaurant, "", true );
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("6");
 
         assertThrows(OwnerNotAuthorizedException.class, ()-> dishServicePort.updateDish(dish, "token"));
@@ -132,7 +132,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111");
         Dish dish = new Dish(20L, "asd", category, "asd", 1L, restaurant, "asd", true);
 
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
         doThrow(DishNotFoundException.class).when(dishPersistencePort).updateDish(dish);
         assertThrows(DishNotFoundException.class, () -> dishServicePort.updateDish(dish, "token"));
@@ -147,7 +147,7 @@ class DishUseCaseTest {
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
         Dish dish = new Dish( 20L, "asd", category, "asd", 1L, restaurant, "asd", true );
 
-        when(restaurantPersistencePort.getRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
+        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
         when(dishPersistencePort.updateDish(dish)).thenReturn(dish);
         assertNotNull(dishServicePort.updateDish(dish, "token"));
