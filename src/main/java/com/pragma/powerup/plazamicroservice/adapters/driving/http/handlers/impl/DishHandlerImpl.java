@@ -34,7 +34,7 @@ public class DishHandlerImpl implements IDishHandler {
     public void activeDish(DishActiveRequestDto dishActiveRequestDto, Long idDish, String token ) {
         Dish dish = dishRequestMapper.toDish( dishActiveRequestDto );
         dish.setId(idDish);
-        dishServicePort.enableDisableDish(  dish, token );
+        dishServicePort.activeDish(  dish, token );
     }
 
 }

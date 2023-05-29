@@ -66,7 +66,7 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public Dish enableDisableDish(Dish dishReq, String token) {
+    public Dish activeDish(Dish dishReq, String token) {
 
         Dish dish = dishPersistencePort.findDishById(dishReq.getId());
         Long idRestaurant = dish.getRestaurant().getId();

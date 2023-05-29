@@ -8,6 +8,6 @@ public interface IDishServicePort {
 
     Dish updateDish( Dish dish, String token );
 
-    Dish enableDisableDish( Dish dish, String token );
+    Dish activeDish(Dish dish, String token );
 
 }
