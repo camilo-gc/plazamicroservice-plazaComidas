@@ -24,6 +24,5 @@ public class DishRequestDto {
     private String id_restaurant;
     @NotBlank
     private String url_image;
-    private String active;
 
 }

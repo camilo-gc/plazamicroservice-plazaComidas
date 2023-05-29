@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishActiveRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IDishHandler;
@@ -11,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/dish")
 @AllArgsConstructor
 @SecurityRequirement(name = "jwt")
-@CommonsLog
 public class DishRestController {
 
     private final IDishHandler dishHandler;
@@ -54,8 +53,25 @@ public class DishRestController {
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> updateDish(@Valid @RequestBody DishUpdateRequestDto dishUpdateRequestDto,
-                                                          @RequestHeader HttpHeaders headers) {
-        dishHandler.updateDish(dishUpdateRequestDto, headers.get("Authorization").get(0).substring(7));
+                                                          @PathVariable("id") Long idDish, @RequestHeader HttpHeaders headers) {
+        dishHandler.updateDish(dishUpdateRequestDto, idDish, headers.get("Authorization").get(0).substring(7));
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
+    }
+
+
+    @Operation(summary = "enable/disable a dish",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "dish updated",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "dish not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "403", description = "Owner not allowed for dish update",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PatchMapping("/{id}")
+    public ResponseEntity<Map<String, String>> activeDish(@Valid @RequestBody DishActiveRequestDto dishActiveRequestDto,
+                                                                 @PathVariable("id") Long idDish, @RequestHeader HttpHeaders headers) {
+        dishHandler.activeDish(dishActiveRequestDto, idDish, headers.get("Authorization").get(0).substring(7));
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.DISH_UPDATED_MESSAGE));
     }

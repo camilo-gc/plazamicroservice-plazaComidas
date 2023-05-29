@@ -7,4 +7,7 @@ public interface IDishServicePort {
     Dish saveDish( Dish dish, String token );
 
     Dish updateDish( Dish dish, String token );
+
+    Dish enableDisableDish( Dish dish, String token );
+
 }

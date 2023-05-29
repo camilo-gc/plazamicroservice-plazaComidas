@@ -29,15 +29,18 @@ public class DishMysqlAdapter implements IDishPersistencePort {
     }
 
     @Override
-    public Dish updateDish(Dish dishReq) {
-
-
-        Dish dish = dishEntityMapper.toDish(dishRepository.findById(dishReq.getId()).orElseThrow(DishNotFoundException::new));
-        dish.setDescription(dishReq.getDescription());
-        dish.setPrice(dishReq.getPrice());
+    public Dish updateDish(Dish dish) {
 
         return dishEntityMapper.toDish(
                 dishRepository.save(dishEntityMapper.toEntity(dish))
+        );
+
+    }
+
+    @Override
+    public Dish findDishById(Long id){
+        return dishEntityMapper.toDish(
+                dishRepository.findById(id).orElseThrow(DishNotFoundException::new)
         );
     }
 

@@ -46,8 +46,9 @@ public class DishUseCase implements IDishServicePort {
     }
 
     @Override
-    public Dish updateDish(Dish dish, String token) {
+    public Dish updateDish(Dish dishReq, String token) {
 
+        Dish dish = dishPersistencePort.findDishById(dishReq.getId());
         Long idRestaurant = dish.getRestaurant().getId();
         Restaurant restaurant = restaurantPersistencePort.findRestaurantById( idRestaurant );
         Long idOwner = restaurant.getIdOwner();
@@ -57,8 +58,31 @@ public class DishUseCase implements IDishServicePort {
             throw new OwnerNotAuthorizedException();
         }
 
+        dish.setDescription(dishReq.getDescription());
+        dish.setPrice(dishReq.getPrice());
+
         return dishPersistencePort.updateDish(dish);
 
     }
+
+    @Override
+    public Dish enableDisableDish(Dish dishReq, String token) {
+
+        Dish dish = dishPersistencePort.findDishById(dishReq.getId());
+        Long idRestaurant = dish.getRestaurant().getId();
+        Restaurant restaurant = restaurantPersistencePort.findRestaurantById( idRestaurant );
+        Long idOwner = restaurant.getIdOwner();
+        String idUser = jwtProviderConfigurationPort.getIdFromToken(token);
+
+        if ( !idUser.equals( valueOf(idOwner) ) ) {
+            throw new OwnerNotAuthorizedException();
+        }
+
+        dish.setActive(dishReq.getActive());
+
+        return dishPersistencePort.updateDish(dish);
+
+    }
+
 
 }

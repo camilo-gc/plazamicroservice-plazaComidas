@@ -97,13 +97,27 @@ class DishUseCaseTest {
 
 
     @Test
+    void updateDishNotFoundException() {
+
+        Category category = new Category(1L, "Entrada", "plato suave para iniciar");
+        Restaurant restaurant = new Restaurant(1L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111");
+        Dish dish = new Dish(20L, "asd", category, "asd", 1L, restaurant, "asd", true);
+
+        doThrow(DishNotFoundException.class).when(dishPersistencePort).findDishById(dish.getId());
+        assertThrows(DishNotFoundException.class, () -> dishServicePort.updateDish(dish, "token"));
+
+    }
+
+    @Test
     void updateDishRestaurantException() {
 
         Category category = new Category( 1L, "Entrada", "plato suave para iniciar" );
         Restaurant restaurant = new Restaurant( 200L, "pepe food", "string", 2L,
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
-        Dish dish = new Dish( null, "asd", category, "asd", 1L, restaurant, "asd", null );
+        Dish dish = new Dish( 2L, "asd", category, "asd", 1L, restaurant, "asd", null );
 
+        when(dishPersistencePort.findDishById(dish.getId())).thenReturn(dish);
         doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById(dish.getRestaurant().getId());
         assertThrows(RestaurantNotFoundException.class, ()-> dishServicePort.updateDish(dish, "token"));
 
@@ -115,27 +129,13 @@ class DishUseCaseTest {
         Category category = new Category( 1L, "Entrada", "plato suave para iniciar" );
         Restaurant restaurant = new Restaurant( 1L, "pepe food", "string", 2L,
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+        Dish dish = new Dish( 2L, "", category, "", 1L, restaurant, "", true );
 
-        Dish dish = new Dish( null, "", category, "", 1L, restaurant, "", true );
+        when(dishPersistencePort.findDishById(dish.getId())).thenReturn(dish);
         when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("6");
 
         assertThrows(OwnerNotAuthorizedException.class, ()-> dishServicePort.updateDish(dish, "token"));
-
-    }
-
-    @Test
-    void updateDishNotFoundException() {
-
-        Category category = new Category(1L, "Entrada", "plato suave para iniciar");
-        Restaurant restaurant = new Restaurant(1L, "pepe food", "string", 2L,
-                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111");
-        Dish dish = new Dish(20L, "asd", category, "asd", 1L, restaurant, "asd", true);
-
-        when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
-        when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
-        doThrow(DishNotFoundException.class).when(dishPersistencePort).updateDish(dish);
-        assertThrows(DishNotFoundException.class, () -> dishServicePort.updateDish(dish, "token"));
 
     }
 
@@ -145,8 +145,9 @@ class DishUseCaseTest {
         Category category = new Category( 155L, "Entrada", "plato suave para iniciar" );
         Restaurant restaurant = new Restaurant( 2L, "pepe food", "string", 2L,
                 "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
-        Dish dish = new Dish( 20L, "asd", category, "asd", 1L, restaurant, "asd", true );
+        Dish dish = new Dish( 2L, "asd", category, "asd", 1L, restaurant, "asd", true );
 
+        when(dishPersistencePort.findDishById(dish.getId())).thenReturn(dish);
         when(restaurantPersistencePort.findRestaurantById(dish.getRestaurant().getId())).thenReturn(restaurant);
         when(jwtProviderConfigurationPort.getIdFromToken("token")).thenReturn("2");
         when(dishPersistencePort.updateDish(dish)).thenReturn(dish);

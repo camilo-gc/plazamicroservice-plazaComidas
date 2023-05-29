@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper;
 
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishActiveRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.domain.model.Dish;
@@ -18,4 +19,6 @@ public interface IDishRequestMapper {
     Dish toDish(DishRequestDto dishRequestDto);
 
     Dish toDish(DishUpdateRequestDto dishUpdateRequestDto);
+
+    Dish toDish(DishActiveRequestDto dishActiveRequestDto);
 }
