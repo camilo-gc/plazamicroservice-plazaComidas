@@ -21,4 +21,6 @@ public interface IDishRequestMapper {
     Dish toDish(DishUpdateRequestDto dishUpdateRequestDto);
 
     Dish toDish(DishActiveRequestDto dishActiveRequestDto);
+
+
 }

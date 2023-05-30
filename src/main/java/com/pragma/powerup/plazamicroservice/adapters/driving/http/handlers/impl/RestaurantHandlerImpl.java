@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.DishResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
@@ -10,6 +11,8 @@ import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,11 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
 
     public RestaurantResponseDto getRestaurantById(Long id){
         return restaurantResponseMapper.toResponse( restaurantServicePort.getRestaurantById( id ) );
+    }
+
+    @Override
+    public List<RestaurantResponseDto> getAllRestaurants() {
+        return restaurantResponseMapper.toResponseList(restaurantServicePort.getAllRestaurants());
     }
 
 }

@@ -1,10 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishRequestDto;
 import com.pragma.powerup.plazamicroservice.domain.model.Dish;
-import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;

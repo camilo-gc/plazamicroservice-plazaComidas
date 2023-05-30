@@ -42,6 +42,7 @@ public class MainSecurity {
                         .requestMatchers("/restaurant/new").hasRole("ADMIN")
                         .requestMatchers("/restaurant/{id}").hasAnyRole("ADMIN", "OWNER")
                         .requestMatchers("/dish/{id}", "/dish/{id}/active").hasRole("OWNER")
+                        .requestMatchers("/restaurant").hasRole("CLIENT")
                         //hasAnyRole("ADMIN", "USER")
                         //hasRole("ADMIN")
                         .anyRequest().authenticated()

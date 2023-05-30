@@ -5,10 +5,13 @@ import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForC
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
+import com.pragma.powerup.plazamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import com.pragma.powerup.plazamicroservice.domain.utils.FieldValidation;
+
+import java.util.List;
 
 
 public class RestaurantUseCase implements IRestaurantServicePort {
@@ -40,5 +43,9 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         return restaurantPersistencePort.findRestaurantById( id );
     }
 
+    @Override
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantPersistencePort.getAllRestaurants();
+    }
 
 }
