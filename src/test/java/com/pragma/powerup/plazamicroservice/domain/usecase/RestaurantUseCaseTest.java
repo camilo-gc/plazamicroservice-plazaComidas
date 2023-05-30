@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
@@ -14,10 +15,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.client.HttpServerErrorException;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -123,5 +129,36 @@ class RestaurantUseCaseTest {
         when(restaurantPersistencePort.findRestaurantById(anyLong())).thenReturn(restaurant);
         assertNotNull(restaurantServicePort.getRestaurantById(anyLong()));
     }
+
+
+    @Test
+    void getAllRestaurantsNotFound(){
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+
+        doThrow(NoDataFoundException.class).when(restaurantPersistencePort).findAllRestaurants(pageable);
+        assertThrows(NoDataFoundException.class, ()-> restaurantServicePort.getAllRestaurants(pageable));
+
+    }
+
+    @Test
+    void getAllRestaurantsSuccessful(){
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+        Restaurant restaurant = new Restaurant( 2L, "Pare&coma", "av 0", 2L,
+                "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
+
+        List<Restaurant> restaurantList = new ArrayList<>();
+        restaurantList.add(restaurant);
+
+        when(restaurantPersistencePort.findAllRestaurants(pageable)).thenReturn(restaurantList);
+        assertNotNull(restaurantServicePort.getAllRestaurants(pageable));
+        assertFalse(restaurantServicePort.getAllRestaurants(pageable).isEmpty());
+
+    }
+
+
 
 }
