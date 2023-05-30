@@ -1,15 +1,14 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
-
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
-import com.pragma.powerup.plazamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import com.pragma.powerup.plazamicroservice.domain.utils.FieldValidation;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -44,8 +43,8 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     }
 
     @Override
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantPersistencePort.getAllRestaurants();
+    public List<Restaurant> getAllRestaurants(Pageable pageable) {
+        return restaurantPersistencePort.findAllRestaurants(pageable);
     }
 
 }

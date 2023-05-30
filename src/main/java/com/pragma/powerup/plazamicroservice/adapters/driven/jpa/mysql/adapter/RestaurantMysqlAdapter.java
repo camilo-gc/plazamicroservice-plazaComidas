@@ -1,15 +1,14 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter;
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.DishEntity;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.RestaurantEntity;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
-import com.pragma.powerup.plazamicroservice.domain.model.Dish;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,8 +34,8 @@ public class RestaurantMysqlAdapter implements IRestaurantPersistencePort {
     }
 
     @Override
-    public List<Restaurant> getAllRestaurants() {
-        List<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll();
+    public List<Restaurant> findAllRestaurants(Pageable pageable) {
+        List<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll(pageable).getContent();
         if (restaurantEntityList.isEmpty()) {
             throw new NoDataFoundException();
         }

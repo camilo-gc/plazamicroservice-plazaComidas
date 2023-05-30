@@ -1,7 +1,9 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,5 +13,5 @@ public interface IRestaurantHandler {
 
     RestaurantResponseDto getRestaurantById(Long id);
 
-    List<RestaurantResponseDto> getAllRestaurants();
+    List<RestaurantNewResponseDto> getAllRestaurants(Pageable pageable);
 }

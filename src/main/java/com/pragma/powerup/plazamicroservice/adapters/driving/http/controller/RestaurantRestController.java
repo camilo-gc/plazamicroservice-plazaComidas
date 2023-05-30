@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +29,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/restaurant")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "jwt")
 public class RestaurantRestController {
     private final IRestaurantHandler restaurantHandler;
 
@@ -38,7 +42,6 @@ public class RestaurantRestController {
                     @ApiResponse(responseCode = "403", description = "Role not allowed for restaurant creation",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/new")
-    @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> saveRestaurant(@Valid @RequestBody RestaurantRequestDto restaurantRequestDto,
                                                               @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
@@ -56,7 +59,6 @@ public class RestaurantRestController {
                     @ApiResponse(responseCode = "404", description = "Restaurant not found with the provided id",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @SecurityRequirement(name = "jwt")
     public ResponseEntity<RestaurantResponseDto> getRestaurantById(@PathVariable("id") Long id){
         return ResponseEntity.ok(restaurantHandler.getRestaurantById(id));
     }
@@ -65,12 +67,17 @@ public class RestaurantRestController {
             responses = {
                     @ApiResponse(responseCode = "200", description = "All restaurants returned",
                             content = @Content(mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = RestaurantResponseDto.class)))),
+                                    array = @ArraySchema(schema = @Schema(implementation = RestaurantNewResponseDto.class)))),
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("")
-    public ResponseEntity<List<RestaurantResponseDto>> getAllRestaurants() {
-        return ResponseEntity.ok(restaurantHandler.getAllRestaurants());
+    public ResponseEntity<List<RestaurantNewResponseDto>> getAllRestaurants(@RequestParam(defaultValue = "1") Integer page,
+                                                                             @RequestParam(defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(
+                restaurantHandler.getAllRestaurants(
+                        PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") )
+                )
+        );
     }
 
 }

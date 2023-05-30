@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper;
 
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import org.mapstruct.Mapper;
@@ -18,5 +19,10 @@ public interface IRestaurantResponseMapper {
     RestaurantResponseDto toResponse(Restaurant restaurant);
 
     List<RestaurantResponseDto> toResponseList(List<Restaurant> restaurantList);
+
+    @Mapping(target = "url_logo", source = "urlLogo")
+    RestaurantNewResponseDto toNewResponse(Restaurant restaurant);
+
+    List<RestaurantNewResponseDto> toNewResponseList(List<Restaurant> restaurantList);
 
 }

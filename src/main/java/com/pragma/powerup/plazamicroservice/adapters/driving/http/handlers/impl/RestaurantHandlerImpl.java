@@ -1,15 +1,14 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.impl;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.DishResponseDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IRestaurantRequestMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IRestaurantResponseMapper;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
-import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +30,8 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     }
 
     @Override
-    public List<RestaurantResponseDto> getAllRestaurants() {
-        return restaurantResponseMapper.toResponseList(restaurantServicePort.getAllRestaurants());
+    public List<RestaurantNewResponseDto> getAllRestaurants(Pageable pageable) {
+        return restaurantResponseMapper.toNewResponseList( restaurantServicePort.getAllRestaurants(pageable) );
     }
 
 }
