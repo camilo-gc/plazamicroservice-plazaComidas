@@ -1,10 +1,13 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
+import com.pragma.powerup.plazamicroservice.domain.dto.User;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
+import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeeRestaurantPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import com.pragma.powerup.plazamicroservice.domain.utils.FieldValidation;
@@ -17,20 +20,26 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserApiFeignPort userApiFeignPort;
+    private final IJwtProviderConfigurationPort jwtProviderConfigurationPort;
+    private final IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort;
 
 
-    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserApiFeignPort userApiFeignPort) {
+    public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserApiFeignPort userApiFeignPort,
+                             IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort,
+                             IJwtProviderConfigurationPort jwtProviderConfigurationPort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.userApiFeignPort = userApiFeignPort;
+        this.employeeRestaurantPersistencePort = employeeRestaurantPersistencePort;
+        this.jwtProviderConfigurationPort = jwtProviderConfigurationPort;
     }
 
     public Restaurant saveRestaurant(Restaurant restaurant, String authorizationHeader) {
 
         FieldValidation.restaurantValidate(restaurant);
 
-        UserResponseDto owner = userApiFeignPort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
+        User owner = userApiFeignPort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
 
-        if ( !owner.getId_role().equals(Constants.OWNER_ROLE_ID) ) {
+        if ( !owner.getIdRole().equals(Constants.OWNER_ROLE_ID) ) {
             throw new RoleNotAllowedForCreationException();
         }
 
@@ -38,8 +47,21 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
     }
 
-    public Restaurant getRestaurantById(Long id) {
-        return restaurantPersistencePort.findRestaurantById( id );
+    @Override
+    public User addEmployeeToRestaurant(Long idRestaurant, User employee, String token) {
+
+        Restaurant restaurant = restaurantPersistencePort.findRestaurantById( idRestaurant );
+        Long idOwner = restaurant.getIdOwner();
+        String idUser = jwtProviderConfigurationPort.getIdFromToken(token.substring(7));
+
+        if (!idUser.equals( String.valueOf(idOwner) ) ) {
+            throw new OwnerNotAuthorizedException();
+        }
+
+        User newEmployee = userApiFeignPort.saveEmployee( employee, token );
+        employeeRestaurantPersistencePort.saveEmployeeRestaurant( newEmployee.getId(), restaurant.getId());
+
+        return newEmployee;
     }
 
     @Override

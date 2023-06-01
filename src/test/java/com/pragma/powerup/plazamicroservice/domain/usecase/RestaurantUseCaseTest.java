@@ -2,13 +2,14 @@ package com.pragma.powerup.plazamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
+import com.pragma.powerup.plazamicroservice.domain.dto.User;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.UserResponseDto;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
+import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeeRestaurantPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,14 +31,24 @@ import static org.mockito.Mockito.*;
 class RestaurantUseCaseTest {
 
     private IRestaurantPersistencePort restaurantPersistencePort;
+    private IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort;
     private IUserApiFeignPort userApiFeignPort;
     private IRestaurantServicePort restaurantServicePort;
+    private IJwtProviderConfigurationPort jwtProviderConfigurationPort;
 
     @BeforeEach
     void setUp() {
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
+        employeeRestaurantPersistencePort = mock(IEmployeeRestaurantPersistencePort.class);
         userApiFeignPort = mock(IUserApiFeignPort.class);
-        restaurantServicePort = new RestaurantUseCase(restaurantPersistencePort, userApiFeignPort);
+        jwtProviderConfigurationPort = mock(IJwtProviderConfigurationPort.class);
+        restaurantServicePort = new RestaurantUseCase(
+                restaurantPersistencePort,
+                userApiFeignPort,
+                employeeRestaurantPersistencePort,
+                jwtProviderConfigurationPort
+        );
+
     }
 
     @Test
@@ -88,8 +99,8 @@ class RestaurantUseCaseTest {
 
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
-        UserResponseDto owner = new UserResponseDto( 3L, "Pepito", "Perez", "333", "+573333333333",
-                "03-03-0303", "pepitoperez@gmail.com", "3333", 3L);
+        User owner = new User( 3L, "Pepito", "Perez", "333", "+573333333333",
+                 "pepitoperez@gmail.com",  3L);
 
         when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         assertThrows(RoleNotAllowedForCreationException.class, () -> restaurantServicePort.saveRestaurant(restaurant, "token"));
@@ -101,8 +112,8 @@ class RestaurantUseCaseTest {
 
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
-        UserResponseDto owner = new UserResponseDto( 2L, "Pepito", "Perez", "333", "+573333333333",
-                "03-03-0303", "pepitoperez@gmail.com", "3333", 2L);
+        User owner = new User( 2L, "Pepito", "Perez", "333", "+573333333333",
+                 "pepitoperez@gmail.com", 2L);
 
         when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
@@ -110,29 +121,16 @@ class RestaurantUseCaseTest {
 
     }
 
-    @Test
-    void getUserNotFound() {
 
-        Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
-                "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
-        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById(anyLong());
-        assertThrows(RestaurantNotFoundException.class, () -> restaurantServicePort.getRestaurantById(anyLong()));
+    //TODO: test addEmployeeToRestauant
 
-    }
 
-    @Test
-    void getUserByIdSuccessful() {
-
-        Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
-                "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
-
-        when(restaurantPersistencePort.findRestaurantById(anyLong())).thenReturn(restaurant);
-        assertNotNull(restaurantServicePort.getRestaurantById(anyLong()));
-    }
+    //
 
 
     @Test
     void getAllRestaurantsNotFound(){
+
         int page = 1;
         int size = 10;
         Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
@@ -144,6 +142,7 @@ class RestaurantUseCaseTest {
 
     @Test
     void getAllRestaurantsSuccessful(){
+
         int page = 1;
         int size = 10;
         Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );

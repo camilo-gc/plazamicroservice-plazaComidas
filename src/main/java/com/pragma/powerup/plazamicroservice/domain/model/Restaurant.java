@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.domain.model;
 
+
 public class Restaurant {
 
     private Long id;
@@ -10,6 +11,7 @@ public class Restaurant {
     private String urlLogo;
     private String nit;
 
+
     public Restaurant(Long id, String name, String address, Long idOwner, String phone, String urlLogo, String nit) {
         this.id = id;
         this.name = name;
@@ -19,6 +21,10 @@ public class Restaurant {
         this.urlLogo = urlLogo;
         this.nit = nit;
     }
+
+    public Restaurant(){
+    }
+
 
     public Long getId() {
         return id;

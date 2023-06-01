@@ -1,11 +1,11 @@
-package com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response;
+package com.pragma.powerup.plazamicroservice.adapters.driven.userapi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserResponseDto {
+public class UserDto {
 
     private Long id;
     private String name;
@@ -16,4 +16,5 @@ public class UserResponseDto {
     private String email;
     private String password;
     private Long id_role;
+
 }

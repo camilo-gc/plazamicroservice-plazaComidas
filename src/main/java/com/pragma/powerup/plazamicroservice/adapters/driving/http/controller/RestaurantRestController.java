@@ -1,8 +1,8 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.RestaurantRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.UserRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IRestaurantHandler;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,17 +49,21 @@ public class RestaurantRestController {
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.RESTAURANT_CREATED_MESSAGE));
     }
 
-    @Operation(summary = "Get a restaurant",
+    @Operation(summary = "Add a new employee",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Restaurant returned",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = RestaurantResponseDto.class))),
-                    @ApiResponse(responseCode = "401", description = "Role not allowed for search a restaurant",
+                    @ApiResponse(responseCode = "201", description = "Employee created",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "409", description = "Employee already exists",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
-                    @ApiResponse(responseCode = "404", description = "Restaurant not found with the provided id",
+                    @ApiResponse(responseCode = "403", description = "Role not allowed for user creation",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RestaurantResponseDto> getRestaurantById(@PathVariable("id") Long id){
-        return ResponseEntity.ok(restaurantHandler.getRestaurantById(id));
+    @PostMapping("/new/employee")
+    @SecurityRequirement(name = "jwt")
+    public ResponseEntity<Map<String, String>> addEmployeeToRestaurant(@Valid @RequestBody UserRequestDto userRequestDto,
+                                                            @RequestHeader HttpHeaders headers) {
+        restaurantHandler.addEmployeeToRestaurant(userRequestDto, headers.get("Authorization").get(0));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.EMPLOYEE_CREATED_MESSAGE));
     }
 
     @Operation(summary = "Get all the restaurants",

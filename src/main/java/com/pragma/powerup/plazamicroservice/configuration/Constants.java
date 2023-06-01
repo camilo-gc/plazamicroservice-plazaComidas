@@ -37,6 +37,7 @@ public class Constants {
     public static final String DISH_NOT_FOUND_MESSAGE = "Dish not found";
     public static final String DISH_UPDATED_MESSAGE = "Dish updated successfully";
     public static final String OWNER_NOT_AUTHORIZED_MESSAGE = "Owner not authorized";
+    public static final String EMPLOYEE_CREATED_MESSAGE = "Employee added successfully";
 
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
 
