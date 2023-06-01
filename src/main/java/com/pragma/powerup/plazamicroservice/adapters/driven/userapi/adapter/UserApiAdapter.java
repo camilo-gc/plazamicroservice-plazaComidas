@@ -3,6 +3,7 @@ package com.pragma.powerup.plazamicroservice.adapters.driven.userapi.adapter;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UserAlreadyExistsException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.mappers.IUserApiMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.entity.UserDto;
@@ -75,7 +76,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
             }
             if ( e.status() == 409 ) {
                 log.error( "409 -> User already exist" );
-                throw new OwnerNotFoundException();
+                throw new UserAlreadyExistsException();
             }
             if ( e.status() == 500 ) {
                 log.error("500 -> UserApi internal error");

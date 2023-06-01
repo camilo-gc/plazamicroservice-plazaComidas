@@ -1,10 +1,9 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazamicroservice.domain.dto.User;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
@@ -100,7 +99,7 @@ class RestaurantUseCaseTest {
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
         User owner = new User( 3L, "Pepito", "Perez", "333", "+573333333333",
-                 "pepitoperez@gmail.com",  3L);
+                 "", "pepitoperez@gmail.com",  "1234",3L);
 
         when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         assertThrows(RoleNotAllowedForCreationException.class, () -> restaurantServicePort.saveRestaurant(restaurant, "token"));
@@ -113,7 +112,7 @@ class RestaurantUseCaseTest {
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
         User owner = new User( 2L, "Pepito", "Perez", "333", "+573333333333",
-                 "pepitoperez@gmail.com", 2L);
+                 "","pepitoperez@gmail.com", "1234",2L);
 
         when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
@@ -122,10 +121,121 @@ class RestaurantUseCaseTest {
     }
 
 
-    //TODO: test addEmployeeToRestauant
+    @Test
+    void addEmployeeRestaurantNotFoundException(){
 
+        User user = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
 
-    //
+        doThrow(RestaurantNotFoundException.class).when(restaurantPersistencePort).findRestaurantById( 0L );
+        assertThrows(
+                RestaurantNotFoundException.class,
+                ()-> restaurantServicePort.addEmployeeToRestaurant(0L, user, "token")
+        );
+
+    }
+
+    @Test
+    void addEmployeeRestaurantOwnerException(){
+
+        String token = "Bearer $2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
+        User employee = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
+        Restaurant restaurant = new Restaurant( 1L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+
+        when(restaurantPersistencePort.findRestaurantById(1L)).thenReturn(restaurant);
+        when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("6");
+
+        assertThrows(
+                OwnerNotAuthorizedException.class,
+                ()-> restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token)
+        );
+
+    }
+
+    @Test
+    void addEmployeeUnauthorizedException() {
+
+        String token = "Bearer $2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
+        User employee = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
+        Restaurant restaurant = new Restaurant( 2L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+
+        when(restaurantPersistencePort.findRestaurantById(2L)).thenReturn(restaurant);
+        when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("2");
+
+        doThrow(UnauthorizedOwnerValidationException.class).when(userApiFeignPort).saveEmployee(employee, token);
+        assertThrows(
+                UnauthorizedOwnerValidationException.class,
+                () -> restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token )
+        );
+    }
+
+    @Test
+    void addEmployeeAlreadyExistsException() {
+
+        String token = "Bearer $2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
+        User employee = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
+        Restaurant restaurant = new Restaurant( 2L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+
+        when(restaurantPersistencePort.findRestaurantById(2L)).thenReturn(restaurant);
+        when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("2");
+
+        doThrow(UserAlreadyExistsException.class).when(userApiFeignPort).saveEmployee(employee, token);
+        assertThrows(
+                UserAlreadyExistsException.class,
+                () -> restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token )
+        );
+    }
+
+    @Test
+    void addEmployeeServerErrorException() {
+
+        String token = "Bearer $2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
+        User employee = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
+        Restaurant restaurant = new Restaurant( 2L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+
+        when(restaurantPersistencePort.findRestaurantById(2L)).thenReturn(restaurant);
+        when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("2");
+
+        doThrow(HttpServerErrorException.class).when(userApiFeignPort).saveEmployee(employee, token);
+        assertThrows(
+                HttpServerErrorException.class,
+                () -> restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token )
+        );
+    }
+
+    @Test
+    void addEmployeeRestaurantSuccessful() {
+
+        String token = "Bearer $2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6";
+        User employee = new User( null, "Pepito", "Perez", "111",
+                "+555555555555", "01-01-0101", "pepitoperez@gmail.com",
+                "$2a$10$2edn/0De4Lk2IovglOz8fuC8z3b7FsctfiotMd9LMRitQnUgyPOW6", 2L);
+        Restaurant restaurant = new Restaurant( 2L, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+
+        when(restaurantPersistencePort.findRestaurantById(2L)).thenReturn(restaurant);
+        when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("2");
+        when(userApiFeignPort.saveEmployee( employee, token )).thenReturn(employee);
+
+        employeeRestaurantPersistencePort.saveEmployeeRestaurant(employee.getId(), restaurant.getId());
+        verify(employeeRestaurantPersistencePort).saveEmployeeRestaurant(employee.getId(), restaurant.getId());
+
+        assertNotNull(restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token ));
+
+    }
 
 
     @Test
