@@ -87,7 +87,7 @@ public class DishUseCase implements IDishServicePort {
 
     }
 
-    //@Override
+    @Override
     public List<Dish> getDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable){
         return dishPersistencePort.findDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable );
     }

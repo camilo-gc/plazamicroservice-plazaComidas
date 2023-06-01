@@ -2,6 +2,7 @@ package com.pragma.powerup.plazamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.CategoryNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.RestaurantNotFoundException;
 import com.pragma.powerup.plazamicroservice.domain.api.IDishServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
@@ -15,6 +16,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -214,5 +221,42 @@ class DishUseCaseTest {
         assertNotNull(dishServicePort.activeDish(dish, "token"));
 
     }
+
+
+    @Test
+    void getDishesByRestaurantAndCategoryNotFound(){
+
+        Long idRestaurant = 4L;
+        Long idCategory = 2L;
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+
+        doThrow(NoDataFoundException.class).when(dishPersistencePort).findDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable );
+        assertThrows(NoDataFoundException.class, () -> dishServicePort.getDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable ));
+
+    }
+
+    @Test
+    void getDishesByRestaurantAndCategorySuccessful(){
+
+        Long idRestaurant = 4L;
+        Long idCategory = 2L;
+        int page = 1;
+        int size = 10;
+        Pageable pageable = PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") );
+        Category category = new Category( idCategory, "Entrada", "plato suave para iniciar" );
+        Restaurant restaurant = new Restaurant( idRestaurant, "pepe food", "string", 2L,
+                "+793247501667", "http://pepefood.com/recursos/logo.jpg", "111" );
+        Dish dish = new Dish( 2L, "asd", category, "asd", 1L, restaurant, "asd", true );
+        List<Dish> dishList = new ArrayList<>();
+        dishList.add(dish);
+
+        when(dishPersistencePort.findDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable )).thenReturn(dishList);
+        assertNotNull(dishServicePort.getDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable ));
+        assertFalse(dishServicePort.getDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable ).isEmpty());
+
+    }
+
 
 }
