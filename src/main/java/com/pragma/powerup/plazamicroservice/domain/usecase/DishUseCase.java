@@ -8,6 +8,9 @@ import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.IDishPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import static java.lang.String.valueOf;
 
@@ -82,6 +85,11 @@ public class DishUseCase implements IDishServicePort {
 
         return dishPersistencePort.updateDish(dish);
 
+    }
+
+    //@Override
+    public List<Dish> getDishesByRestaurantAndCategory(Long idRestaurant, Long idCategory, Pageable pageable){
+        return dishPersistencePort.findDishesByRestaurantAndCategory( idRestaurant, idCategory, pageable );
     }
 
 

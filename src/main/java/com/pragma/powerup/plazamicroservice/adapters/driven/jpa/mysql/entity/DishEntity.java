@@ -25,6 +25,7 @@ public class DishEntity {
     @ManyToOne
     @JoinColumn(name = "id_restaurant")
     private RestaurantEntity restaurantEntity;
-    private String url_image;
+    @Column(name = "url_image")
+    private String urlImage;
     private Boolean active;
 }
