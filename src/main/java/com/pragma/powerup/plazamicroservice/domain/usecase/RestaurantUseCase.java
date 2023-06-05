@@ -37,7 +37,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
 
         FieldValidation.restaurantValidate(restaurant);
 
-        User owner = userApiFeignPort.findOwnerById( restaurant.getIdOwner(), authorizationHeader );
+        User owner = userApiFeignPort.findUserById( restaurant.getIdOwner(), authorizationHeader );
 
         if ( !owner.getIdRole().equals(Constants.OWNER_ROLE_ID) ) {
             throw new RoleNotAllowedForCreationException();

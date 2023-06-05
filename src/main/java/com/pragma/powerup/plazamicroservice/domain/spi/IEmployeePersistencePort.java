@@ -7,4 +7,6 @@ public interface IEmployeePersistencePort {
 
     Employee saveEmployee(Long idEmployee, Long idRestaurant);
 
+    Employee findByIdEmployee(Long idEmployee);
+
 }

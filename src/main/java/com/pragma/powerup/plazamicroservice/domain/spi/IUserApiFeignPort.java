@@ -5,7 +5,7 @@ import com.pragma.powerup.plazamicroservice.domain.dto.User;
 
 public interface IUserApiFeignPort {
 
-    User findOwnerById(Long id, String authorizationHeader);
+    User findUserById(Long id, String authorizationHeader);
 
     User saveEmployee(User user, String token);
 

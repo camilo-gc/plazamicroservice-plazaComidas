@@ -39,7 +39,7 @@ public class BeanConfiguration {
 
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
-        return new RestaurantUseCase(restaurantPersistencePort(), userApiPersistencePort(), employeeRestaurantPersistencePort(), jwtProviderConfigurationPort);
+        return new RestaurantUseCase(restaurantPersistencePort(), userApiPersistencePort(), employeePersistencePort(), jwtProviderConfigurationPort);
     }
 
     @Bean
@@ -53,7 +53,7 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IEmployeePersistencePort employeeRestaurantPersistencePort() {
+    public IEmployeePersistencePort employeePersistencePort() {
         return new EmployeeMysqlAdapter(employeeRestaurantRepository, employeeRestaurantEntityMapper);
     }
 
@@ -69,7 +69,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), jwtProviderConfigurationPort);
+        return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), employeePersistencePort(), jwtProviderConfigurationPort);
     }
 
     @Bean

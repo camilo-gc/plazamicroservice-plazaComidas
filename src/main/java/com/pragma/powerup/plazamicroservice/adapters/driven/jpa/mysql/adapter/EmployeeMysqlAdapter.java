@@ -29,4 +29,11 @@ public class EmployeeMysqlAdapter implements IEmployeePersistencePort {
 
     }
 
+    @Override
+    public Employee findByIdEmployee(Long idEmployee) {
+        return employeeEntityMapper.toEmployee(
+                employeeRepository.findByIdEmployee( idEmployee )
+        );
+    }
+
 }

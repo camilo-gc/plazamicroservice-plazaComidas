@@ -26,7 +26,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
     private final IUserApiMapper userApiMapper;
 
     @Override
-    public User findOwnerById(Long id, String authorizationHeader) {
+    public User findUserById(Long id, String authorizationHeader) {
 
         ResponseEntity<UserDto> responseEntity = null;
 

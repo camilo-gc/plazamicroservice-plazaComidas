@@ -65,7 +65,7 @@ class RestaurantUseCaseTest {
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 0L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987987");
 
-        doThrow(UnauthorizedOwnerValidationException.class).when(userApiFeignPort).findOwnerById(restaurant.getIdOwner(), "token");
+        doThrow(UnauthorizedOwnerValidationException.class).when(userApiFeignPort).findUserById(restaurant.getIdOwner(), "token");
         assertThrows(UnauthorizedOwnerValidationException.class, () -> restaurantServicePort.saveRestaurant(restaurant, "token"));
 
     }
@@ -76,7 +76,7 @@ class RestaurantUseCaseTest {
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 0L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987");
 
-        doThrow(OwnerNotFoundException.class).when(userApiFeignPort).findOwnerById(restaurant.getIdOwner(), "token");
+        doThrow(OwnerNotFoundException.class).when(userApiFeignPort).findUserById(restaurant.getIdOwner(), "token");
         assertThrows(OwnerNotFoundException.class, () -> restaurantServicePort.saveRestaurant(restaurant, "token"));
 
     }
@@ -88,7 +88,7 @@ class RestaurantUseCaseTest {
         Restaurant restaurant = new Restaurant( null, "Pare&coma", "av 0", 2L,
                 "+573333333333", "pare&coma.com/recursos/logo.jpg", "987987987");
 
-        doThrow(HttpServerErrorException.class).when(userApiFeignPort).findOwnerById(restaurant.getIdOwner(), token);
+        doThrow(HttpServerErrorException.class).when(userApiFeignPort).findUserById(restaurant.getIdOwner(), token);
         assertThrows(HttpServerErrorException.class, () -> restaurantServicePort.saveRestaurant(restaurant, token));
 
     }
@@ -101,7 +101,7 @@ class RestaurantUseCaseTest {
         User owner = new User( 3L, "Pepito", "Perez", "333", "+573333333333",
                  "", "pepitoperez@gmail.com",  "1234",3L);
 
-        when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
+        when(userApiFeignPort.findUserById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         assertThrows(RoleNotAllowedForCreationException.class, () -> restaurantServicePort.saveRestaurant(restaurant, "token"));
 
     }
@@ -114,7 +114,7 @@ class RestaurantUseCaseTest {
         User owner = new User( 2L, "Pepito", "Perez", "333", "+573333333333",
                  "","pepitoperez@gmail.com", "1234",2L);
 
-        when(userApiFeignPort.findOwnerById(restaurant.getIdOwner(), "token")).thenReturn(owner);
+        when(userApiFeignPort.findUserById(restaurant.getIdOwner(), "token")).thenReturn(owner);
         when(restaurantPersistencePort.saveRestaurant(restaurant)).thenReturn(restaurant);
         assertNotNull(restaurantServicePort.saveRestaurant(restaurant, "token"));
 
