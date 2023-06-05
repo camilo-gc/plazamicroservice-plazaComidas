@@ -7,7 +7,7 @@ import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForC
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
-import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeeRestaurantPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 class RestaurantUseCaseTest {
 
     private IRestaurantPersistencePort restaurantPersistencePort;
-    private IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort;
+    private IEmployeePersistencePort employeeRestaurantPersistencePort;
     private IUserApiFeignPort userApiFeignPort;
     private IRestaurantServicePort restaurantServicePort;
     private IJwtProviderConfigurationPort jwtProviderConfigurationPort;
@@ -38,7 +38,7 @@ class RestaurantUseCaseTest {
     @BeforeEach
     void setUp() {
         restaurantPersistencePort = mock(IRestaurantPersistencePort.class);
-        employeeRestaurantPersistencePort = mock(IEmployeeRestaurantPersistencePort.class);
+        employeeRestaurantPersistencePort = mock(IEmployeePersistencePort.class);
         userApiFeignPort = mock(IUserApiFeignPort.class);
         jwtProviderConfigurationPort = mock(IJwtProviderConfigurationPort.class);
         restaurantServicePort = new RestaurantUseCase(
@@ -230,8 +230,8 @@ class RestaurantUseCaseTest {
         when(jwtProviderConfigurationPort.getIdFromToken(token.substring(7))).thenReturn("2");
         when(userApiFeignPort.saveEmployee( employee, token )).thenReturn(employee);
 
-        employeeRestaurantPersistencePort.saveEmployeeRestaurant(employee.getId(), restaurant.getId());
-        verify(employeeRestaurantPersistencePort).saveEmployeeRestaurant(employee.getId(), restaurant.getId());
+        employeeRestaurantPersistencePort.saveEmployee(employee.getId(), restaurant.getId());
+        verify(employeeRestaurantPersistencePort).saveEmployee(employee.getId(), restaurant.getId());
 
         assertNotNull(restaurantServicePort.addEmployeeToRestaurant( restaurant.getId(), employee, token ));
 

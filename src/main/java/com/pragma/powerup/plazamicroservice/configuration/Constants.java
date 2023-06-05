@@ -41,4 +41,15 @@ public class Constants {
 
     public static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
 
+    public static final String ORDER_STATUS_PENDING = "Pending";
+    public static final String ORDER_STATUS_PREPARATION = "Preparation";
+    public static final String ORDER_STATUS_CANCELED = "Canceled";
+    public static final String ORDER_STATUS_READY = "Ready";
+    public static final String ORDER_STATUS_DELIVERED = "Delivered";
+
+    public static final String ORDER_IN_PROCESS_MESSAGE = "orders already exist for this client";
+    public static final String ORDER_CREATED_MESSAGE = "Order created successfully";
+
+
+    public static final String DISH_IS_NOT_IN_RESTAURANT_MESSAGE = "one of the dishes not belong to the restaurant";
 }

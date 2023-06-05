@@ -2,6 +2,7 @@ package com.pragma.powerup.plazamicroservice.configuration;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.*;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
 import org.springframework.http.HttpStatus;
@@ -126,5 +127,18 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, OWNER_NOT_AUTHORIZED_MESSAGE));
     }
 
+    @ExceptionHandler(OrderInProcessException.class)
+    public ResponseEntity<Map<String, String>> handleOrderInProcessException(
+            OrderInProcessException orderInProcessException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IN_PROCESS_MESSAGE));
+    }
+
+    @ExceptionHandler(DishIsNotInRestaurantException.class)
+    public ResponseEntity<Map<String, String>> handleDishIsNotInRestaurantException(
+            DishIsNotInRestaurantException dishIsNotInRestaurantException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, DISH_IS_NOT_IN_RESTAURANT_MESSAGE));
+    }
 
 }

@@ -1,6 +1,6 @@
 package com.pragma.powerup.plazamicroservice.domain.model;
 
-public class EmployeeRestaurant {
+public class Employee {
 
     private Long id;
 
@@ -8,7 +8,7 @@ public class EmployeeRestaurant {
 
     private Restaurant restaurant;
 
-    public EmployeeRestaurant(Long id, Long idEmployee, Restaurant restaurant) {
+    public Employee(Long id, Long idEmployee, Restaurant restaurant) {
         this.id = id;
         this.idEmployee = idEmployee;
         this.restaurant = restaurant;

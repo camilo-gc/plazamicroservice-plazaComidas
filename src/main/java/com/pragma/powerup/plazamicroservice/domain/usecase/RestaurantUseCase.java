@@ -6,7 +6,7 @@ import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForC
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
-import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeeRestaurantPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IRestaurantPersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
@@ -21,11 +21,11 @@ public class RestaurantUseCase implements IRestaurantServicePort {
     private final IRestaurantPersistencePort restaurantPersistencePort;
     private final IUserApiFeignPort userApiFeignPort;
     private final IJwtProviderConfigurationPort jwtProviderConfigurationPort;
-    private final IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort;
+    private final IEmployeePersistencePort employeeRestaurantPersistencePort;
 
 
     public RestaurantUseCase(IRestaurantPersistencePort restaurantPersistencePort, IUserApiFeignPort userApiFeignPort,
-                             IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort,
+                             IEmployeePersistencePort employeeRestaurantPersistencePort,
                              IJwtProviderConfigurationPort jwtProviderConfigurationPort) {
         this.restaurantPersistencePort = restaurantPersistencePort;
         this.userApiFeignPort = userApiFeignPort;
@@ -59,7 +59,7 @@ public class RestaurantUseCase implements IRestaurantServicePort {
         }
 
         User newEmployee = userApiFeignPort.saveEmployee( employee, token );
-        employeeRestaurantPersistencePort.saveEmployeeRestaurant( newEmployee.getId(), restaurant.getId());
+        employeeRestaurantPersistencePort.saveEmployee( newEmployee.getId(), restaurant.getId());
 
         return newEmployee;
     }

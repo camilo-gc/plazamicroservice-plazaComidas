@@ -14,12 +14,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeRestaurantEntity {
+public class EmployeeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long id_employee;
+    @Column(name = "id_employee")
+    private Long idEmployee;
     @ManyToOne
     @JoinColumn(name = "id_restaurant")
     private RestaurantEntity restaurantEntity;

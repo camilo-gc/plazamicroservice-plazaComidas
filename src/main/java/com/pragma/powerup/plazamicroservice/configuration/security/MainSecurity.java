@@ -42,7 +42,7 @@ public class MainSecurity {
                         .requestMatchers("/restaurant/new").hasRole("ADMIN")
                         .requestMatchers("/restaurant/{id}").hasAnyRole("ADMIN", "OWNER")
                         .requestMatchers("/dish/{id}", "/restaurant/new/employee", "/dish/{id}/active").hasRole("OWNER")
-                        .requestMatchers("/restaurant").hasRole("CLIENT")
+                        .requestMatchers("/restaurant", "/order").hasRole("CLIENT")
                         .anyRequest().authenticated()
                 )
                 .formLogin().disable()

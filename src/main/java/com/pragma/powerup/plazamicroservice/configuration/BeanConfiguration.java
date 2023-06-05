@@ -1,22 +1,17 @@
 package com.pragma.powerup.plazamicroservice.configuration;
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.DishMysqlAdapter;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.EmployeeRestaurantMysqlAdapter;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.RestaurantMysqlAdapter;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IEmployeeRestaurantEntityMapper;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IEmployeeRestaurantRepository;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.*;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.*;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.*;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.adapter.UserApiAdapter;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IDishEntityMapper;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IRestaurantEntityMapper;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.ICategoryRepository;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IDishRepository;
-import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IRestaurantRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.mappers.IUserApiMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.domain.api.IDishServicePort;
+import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.*;
 import com.pragma.powerup.plazamicroservice.domain.usecase.DishUseCase;
+import com.pragma.powerup.plazamicroservice.domain.usecase.OrderUseCase;
 import com.pragma.powerup.plazamicroservice.domain.usecase.RestaurantUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -28,14 +23,18 @@ public class BeanConfiguration {
 
     private final IRestaurantRepository restaurantRepository;
     private final IRestaurantEntityMapper restaurantEntityMapper;
-    private final IEmployeeRestaurantRepository employeeRestaurantRepository;
-    private final IEmployeeRestaurantEntityMapper employeeRestaurantEntityMapper;
+    private final IEmployeeRepository employeeRestaurantRepository;
+    private final IEmployeeEntityMapper employeeRestaurantEntityMapper;
     private final IUserApiRepository userApiRepository;
     private final IUserApiMapper userApiMapper;
     private final IDishRepository dishRepository;
     private final IDishEntityMapper dishEntityMapper;
     private final ICategoryRepository categoryRepository;
     private final IJwtProviderConfigurationPort jwtProviderConfigurationPort;
+    private final IOrderRepository orderRepository;
+    private final IOrderDishRepository orderDishRepository;
+    private final IOrderEntityMapper orderEntityMapper;
+    private final IOrderDishEntityMapper orderDishEntityMapper;
 
 
     @Bean
@@ -54,8 +53,8 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public IEmployeeRestaurantPersistencePort employeeRestaurantPersistencePort() {
-        return new EmployeeRestaurantMysqlAdapter(employeeRestaurantRepository, employeeRestaurantEntityMapper);
+    public IEmployeePersistencePort employeeRestaurantPersistencePort() {
+        return new EmployeeMysqlAdapter(employeeRestaurantRepository, employeeRestaurantEntityMapper);
     }
 
     @Bean
@@ -68,5 +67,19 @@ public class BeanConfiguration {
         return new DishMysqlAdapter(dishRepository, categoryRepository, dishEntityMapper);
     }
 
+    @Bean
+    public IOrderServicePort orderServicePort() {
+        return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), jwtProviderConfigurationPort);
+    }
+
+    @Bean
+    public IOrderPersistencePort orderPersistencePort() {
+        return new OrderMysqlAdapter(orderRepository, orderEntityMapper);
+    }
+
+    @Bean
+    public IOrderDishPersistencePort orderDishPersistencePort() {
+        return new OrderDishMysqlAdapter(orderDishRepository, orderDishEntityMapper, dishRepository);
+    }
 
 }
