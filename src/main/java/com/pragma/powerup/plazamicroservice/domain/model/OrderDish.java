@@ -14,6 +14,9 @@ public class OrderDish {
         this.quantity = quantity;
     }
 
+    public OrderDish() {
+    }
+
     public Long getId() {
         return id;
     }

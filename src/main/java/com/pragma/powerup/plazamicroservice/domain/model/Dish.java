@@ -22,6 +22,9 @@ public class Dish {
         this.active = active;
     }
 
+    public Dish() {
+    }
+
     public Long getId() {
         return id;
     }

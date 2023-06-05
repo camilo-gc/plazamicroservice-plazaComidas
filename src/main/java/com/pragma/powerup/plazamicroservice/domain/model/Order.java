@@ -22,6 +22,9 @@ public class Order {
         this.restaurant = restaurant;
     }
 
+    public Order() {
+    }
+
     public Long getId() {
         return id;
     }
