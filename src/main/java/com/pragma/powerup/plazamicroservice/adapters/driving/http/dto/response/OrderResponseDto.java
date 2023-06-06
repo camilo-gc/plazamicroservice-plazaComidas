@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,10 +11,13 @@ import lombok.Getter;
 public class OrderResponseDto {
 
     private Long id;
-    private String id_client;
+    @JsonProperty(value = "id_client")
+    private String idClient;
     private String date;
     private String status;
-    private String id_chef;
-    private String id_restaurant;
+    @JsonProperty(value = "id_chef")
+    private String idChef;
+    @JsonProperty(value = "id_restaurant")
+    private String idRestaurant;
 
 }

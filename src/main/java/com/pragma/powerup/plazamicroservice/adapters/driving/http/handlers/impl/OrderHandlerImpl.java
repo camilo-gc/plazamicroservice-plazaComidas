@@ -2,16 +2,19 @@ package com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.impl
 
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IOrderDishRequestMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IOrderRequestMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IOrderResponseMapper;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper.IOrderUpdateRequestMapper;
 import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -23,6 +26,8 @@ public class OrderHandlerImpl implements IOrderHandler {
     private final IOrderRequestMapper orderRequestMapper;
     private final IOrderDishRequestMapper orderDishRequestMapper;
     private final IOrderResponseMapper orderResponseMapper;
+    private final IOrderUpdateRequestMapper orderUpdateRequestMapper;
+
 
     @Override
     public void saveOrder(OrderRequestDto orderRequestDto, String authorizationHeader) {
@@ -40,5 +45,13 @@ public class OrderHandlerImpl implements IOrderHandler {
                 orderServicePort.getOrdersOfRestaurantByStatus(token, status, pageable)
         );
     }
+
+    public List<OrderResponseDto> assignToOrder(List<OrderUpdateRequestDto> orderUpdateRequestDtoList, String token){
+        return orderResponseMapper.toResponseList(
+                orderServicePort.assignToOrder(orderUpdateRequestMapper.toOrderList(orderUpdateRequestDtoList), token)
+        );
+    }
+
+
 
 }

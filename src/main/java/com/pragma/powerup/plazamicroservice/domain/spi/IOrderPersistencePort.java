@@ -12,4 +12,6 @@ public interface IOrderPersistencePort {
     Order saveOrder(Order order);
 
     List<Order> findOrderOfRestaurantByStatus(Long idRestaurant, String status, Pageable pageable);
+
+    Order findById(Long idOrder);
 }

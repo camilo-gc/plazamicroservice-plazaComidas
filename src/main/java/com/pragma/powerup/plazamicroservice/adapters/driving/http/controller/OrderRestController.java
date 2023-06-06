@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
@@ -70,6 +71,16 @@ public class OrderRestController {
                 )
         );
 
+    }
+
+    @PatchMapping("/assign")
+    public ResponseEntity<List<OrderResponseDto>> assignToOrder(@Valid @RequestBody List<OrderUpdateRequestDto> orderUpdateRequestDtoList,
+                                                                @RequestHeader HttpHeaders headers){
+
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);
+        return ResponseEntity.ok(
+                restaurantHandler.assignToOrder( orderUpdateRequestDtoList, token)
+        );
     }
 
 }

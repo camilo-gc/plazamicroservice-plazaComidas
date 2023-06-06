@@ -13,4 +13,6 @@ public interface IOrderServicePort {
 
     List<Order> getOrdersOfRestaurantByStatus(String token, String status, Pageable pageable);
 
+    List<Order> assignToOrder(List<Order> idOrders, String token);
+
 }

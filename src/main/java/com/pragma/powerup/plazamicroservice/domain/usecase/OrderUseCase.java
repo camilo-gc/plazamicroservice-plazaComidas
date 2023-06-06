@@ -12,6 +12,7 @@ import com.pragma.powerup.plazamicroservice.domain.spi.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,5 +67,29 @@ public class OrderUseCase implements IOrderServicePort {
 
         return orderPersistencePort.findOrderOfRestaurantByStatus(idRestaurant, status, pageable);
     }
+
+    @Transactional
+    public List<Order> assignToOrder(List<Order> orderList, String token) {
+
+        String idEmployee = jwtProviderConfigurationPort.getIdFromToken(token);
+        Employee chef = employeePersistencePort.findByIdEmployee(Long.valueOf(idEmployee));
+        List<Order> orderListUpdated = new ArrayList<>();
+
+        for ( Order order: orderList ) {
+
+            order = orderPersistencePort.findById(order.getId());
+
+            order.setChef(chef);
+            order.setStatus(Constants.ORDER_STATUS_PREPARATION);
+            order = orderPersistencePort.saveOrder(order);
+
+            orderListUpdated.add(order);
+
+        }
+
+        return orderListUpdated;
+
+    }
+
 
 }

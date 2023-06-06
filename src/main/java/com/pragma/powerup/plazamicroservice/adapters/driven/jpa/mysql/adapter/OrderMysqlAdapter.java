@@ -3,6 +3,7 @@ package com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.entity.OrderEntity;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.IOrderEntityMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.IOrderRepository;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
@@ -55,6 +56,13 @@ public class OrderMysqlAdapter implements IOrderPersistencePort {
 
         return orderEntityMapper.toOrderList( orderEntityList );
 
+    }
+
+    public Order findById(Long idOrder){
+
+        return orderEntityMapper.toOrder(
+                orderRepository.findById(idOrder).orElseThrow(OrderNotFoundException::new)
+        );
     }
 
 

@@ -52,4 +52,7 @@ public class Constants {
 
 
     public static final String DISH_IS_NOT_IN_RESTAURANT_MESSAGE = "one of the dishes not belong to the restaurant";
+
+
+    public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";
 }
