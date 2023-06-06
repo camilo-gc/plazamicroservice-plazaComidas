@@ -1,8 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.mapper;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderDishRequestDto;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
-import com.pragma.powerup.plazamicroservice.domain.model.Order;
 import com.pragma.powerup.plazamicroservice.domain.model.OrderDish;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,7 +13,7 @@ import java.util.List;
         unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface IOrderDishRequestMapper {
 
-    @Mapping(target = "dish.id", source = "id_dish")
+    @Mapping(target = "dish.id", source = "idDish")
     OrderDish toOrderDish(OrderDishRequestDto orderDishRequestDto);
 
     List<OrderDish> toOrderDishList(List<OrderDishRequestDto> orderDishRequestDtoList);

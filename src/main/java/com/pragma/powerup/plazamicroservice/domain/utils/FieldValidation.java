@@ -28,7 +28,7 @@ public class FieldValidation {
 
     public static boolean nameIsValid(String name){
 
-        if ( utils.isNumber( name ) ) {
+        if ( Utils.isNumber( name ) ) {
             return false;
         }
         return true;
@@ -58,13 +58,13 @@ public class FieldValidation {
 
     public static boolean dniIsValid(String dni){
 
-        return utils.isNumber( dni );
+        return Utils.isNumber( dni );
 
     }
 
     public static boolean ageIsValid(String birthDate){
 
-        if ( utils.calculateAge( birthDate ) < 18 ) {
+        if ( Utils.calculateAge( birthDate ) < 18 ) {
             return false;
         }
         return true;

@@ -2,7 +2,6 @@ package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.RestaurantNewResponseDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.handlers.IOrderHandler;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,7 +58,7 @@ public class OrderRestController {
                     @ApiResponse(responseCode = "404", description = "No data found",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @GetMapping("")
-    public ResponseEntity<List<OrderResponseDto>> getAllRestaurants(@RequestParam String status,
+    public ResponseEntity<List<OrderResponseDto>> getOrderOfRestaurantsByStatus(@RequestParam String status,
                                                                     @RequestParam(defaultValue = "1") Integer page,
                                                                     @RequestParam(defaultValue = "10") Integer size,
                                                                     @RequestHeader HttpHeaders headers) {

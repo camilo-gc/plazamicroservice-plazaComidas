@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class utils {
+public class Utils {
 
     public static boolean isNumber(String number){
 
