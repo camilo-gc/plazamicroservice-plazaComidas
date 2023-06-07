@@ -1,10 +1,13 @@
 package com.pragma.powerup.plazamicroservice.domain.usecase;
 
+
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.DishIsNotInRestaurantException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.DishNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.NoDataFoundException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OrderNotFoundException;
 import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderListEmptyException;
 import com.pragma.powerup.plazamicroservice.domain.model.*;
 import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeePersistencePort;
 import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
@@ -16,14 +19,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 class OrderUseCaseTest {
@@ -204,6 +208,59 @@ class OrderUseCaseTest {
 
         assertNotNull( orderServicePort.getOrdersOfRestaurantByStatus(token, status, pageable) );
         assertFalse(orderServicePort.getOrdersOfRestaurantByStatus(token, status, pageable).isEmpty());
+
+    }
+
+    @Test
+    void assignToOrderListEmptyException(){
+
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRvbmVAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwiaWQiOjQsImlhdCI6MTY4NTkyODY1MCwiZXhwIjoxNjg2NTc2NjUwfQ.WwreJGgc_vvqg9-Dtlnfp18E_xFhWiN3gPSsNDu7BH0";
+        List<Order> orderList = new ArrayList<>();
+
+        assertThrows(OrderListEmptyException.class, () -> orderServicePort.assignToOrder(orderList, token));
+    }
+
+    @Test
+    void assignToOrderNotFoundException(){
+
+        Long idEmployee = 3L;
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRvbmVAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwiaWQiOjQsImlhdCI6MTY4NTkyODY1MCwiZXhwIjoxNjg2NTc2NjUwfQ.WwreJGgc_vvqg9-Dtlnfp18E_xFhWiN3gPSsNDu7BH0";
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(4L);
+        Employee employee = new Employee( 3L, 3L, restaurant );
+        List<Order> orderList = new ArrayList<>();
+        Order order = new Order();
+        order.setId(3L);
+        orderList.add(order);
+
+
+        when(jwtProviderConfigurationPort.getIdFromToken(token)).thenReturn(String.valueOf(idEmployee));
+        when(employeePersistencePort.findByIdEmployee(idEmployee)).thenReturn(employee);
+        doThrow(OrderNotFoundException.class).when(orderPersistencePort).findById(order.getId());
+        assertThrows(OrderNotFoundException.class, () -> orderServicePort.assignToOrder(orderList, token));
+    }
+
+    @Test
+    void assignToOrderSuccessful(){
+
+        Long idEmployee = 3L;
+        Long idClient = 3L;
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRvbmVAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9DTElFTlQiXSwiaWQiOjQsImlhdCI6MTY4NTkyODY1MCwiZXhwIjoxNjg2NTc2NjUwfQ.WwreJGgc_vvqg9-Dtlnfp18E_xFhWiN3gPSsNDu7BH0";
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(4L);
+        Employee employee = new Employee( 3L, 3L, restaurant );
+        List<Order> orderList = new ArrayList<>();
+        Order order = new Order(3L, idClient, new Date(), "Pending", employee, restaurant);
+        orderList.add(order);
+
+
+        when(jwtProviderConfigurationPort.getIdFromToken(token)).thenReturn(String.valueOf(idEmployee));
+        when(employeePersistencePort.findByIdEmployee(idEmployee)).thenReturn(employee);
+        when(orderPersistencePort.findById(order.getId())).thenReturn(order);
+        when(orderPersistencePort.saveOrder(order)).thenReturn(order);
+
+        assertNotNull(orderServicePort.assignToOrder(orderList, token));
+        assertFalse(orderServicePort.assignToOrder(orderList, token).isEmpty());
 
     }
 

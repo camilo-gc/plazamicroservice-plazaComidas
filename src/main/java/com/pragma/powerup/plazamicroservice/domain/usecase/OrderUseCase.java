@@ -4,10 +4,10 @@ package com.pragma.powerup.plazamicroservice.domain.usecase;
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderListEmptyException;
 import com.pragma.powerup.plazamicroservice.domain.model.Employee;
 import com.pragma.powerup.plazamicroservice.domain.model.Order;
 import com.pragma.powerup.plazamicroservice.domain.model.OrderDish;
-import com.pragma.powerup.plazamicroservice.domain.model.Restaurant;
 import com.pragma.powerup.plazamicroservice.domain.spi.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,6 +71,10 @@ public class OrderUseCase implements IOrderServicePort {
     @Transactional
     public List<Order> assignToOrder(List<Order> orderList, String token) {
 
+        if (orderList.isEmpty()) {
+            throw new OrderListEmptyException();
+        }
+
         String idEmployee = jwtProviderConfigurationPort.getIdFromToken(token);
         Employee chef = employeePersistencePort.findByIdEmployee(Long.valueOf(idEmployee));
         List<Order> orderListUpdated = new ArrayList<>();
@@ -90,6 +94,5 @@ public class OrderUseCase implements IOrderServicePort {
         return orderListUpdated;
 
     }
-
 
 }

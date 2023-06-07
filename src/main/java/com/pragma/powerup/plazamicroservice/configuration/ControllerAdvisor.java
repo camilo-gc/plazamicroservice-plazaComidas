@@ -1,10 +1,7 @@
 package com.pragma.powerup.plazamicroservice.configuration;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.*;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.FieldValidationException;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.OwnerNotAuthorizedException;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.RoleNotAllowedForCreationException;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -145,6 +142,13 @@ public class ControllerAdvisor {
     public ResponseEntity<Map<String, String>> handleOrderNotFoundException(OrderNotFoundException orderNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_NOT_FOUND_MESSAGE));
+    }
+
+    @ExceptionHandler(OrderListEmptyException.class)
+    public ResponseEntity<Map<String, String>> handleOrderListEmptyException(
+            OrderListEmptyException orderListEmptyException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_LIST_EMPTY_MESSAGE));
     }
 
 }

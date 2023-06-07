@@ -74,7 +74,7 @@ public class OrderRestController {
     }
 
     @PatchMapping("/assign")
-    public ResponseEntity<List<OrderResponseDto>> assignToOrder(@Valid @RequestBody List<OrderUpdateRequestDto> orderUpdateRequestDtoList,
+    public ResponseEntity<List<OrderResponseDto>> assignToOrder(@Valid @RequestBody List<@Valid OrderUpdateRequestDto> orderUpdateRequestDtoList,
                                                                 @RequestHeader HttpHeaders headers){
 
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);

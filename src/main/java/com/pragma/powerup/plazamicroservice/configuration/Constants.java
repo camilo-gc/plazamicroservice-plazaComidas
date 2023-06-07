@@ -55,4 +55,5 @@ public class Constants {
 
 
     public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";
+    public static final String ORDER_LIST_EMPTY_MESSAGE = "one of the dishes not belong to the restaurant";
 }
