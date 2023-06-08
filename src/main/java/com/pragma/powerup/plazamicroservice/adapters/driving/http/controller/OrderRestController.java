@@ -73,7 +73,16 @@ public class OrderRestController {
 
     }
 
-    @PatchMapping("/assign")
+    @Operation(summary = "Assign to orders",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "successful assignment",
+                            content = @Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = OrderResponseDto.class)))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Bad Request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
+    @PutMapping("/assign")
     public ResponseEntity<List<OrderResponseDto>> assignToOrder(@Valid @RequestBody List<@Valid OrderUpdateRequestDto> orderUpdateRequestDtoList,
                                                                 @RequestHeader HttpHeaders headers){
 
@@ -81,6 +90,7 @@ public class OrderRestController {
         return ResponseEntity.ok(
                 restaurantHandler.assignToOrder( orderUpdateRequestDtoList, token)
         );
+
     }
 
 }
