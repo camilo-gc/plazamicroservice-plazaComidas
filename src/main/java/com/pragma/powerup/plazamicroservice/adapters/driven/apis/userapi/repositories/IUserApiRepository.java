@@ -1,12 +1,10 @@
-package com.pragma.powerup.plazamicroservice.adapters.driven.userapi.repositories;
+package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.repositories;
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.entity.UserDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity.UserDto;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @FeignClient(name = "userApi", url = "${feign.userApi.url}")
 public interface IUserApiRepository {

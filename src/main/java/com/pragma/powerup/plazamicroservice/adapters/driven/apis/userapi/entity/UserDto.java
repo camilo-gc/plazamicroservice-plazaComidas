@@ -1,4 +1,4 @@
-package com.pragma.powerup.plazamicroservice.adapters.driven.userapi.entity;
+package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

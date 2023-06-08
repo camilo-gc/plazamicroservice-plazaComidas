@@ -1,12 +1,12 @@
-package com.pragma.powerup.plazamicroservice.adapters.driven.userapi.adapter;
+package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.adapter;
 
 
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity.UserDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.mappers.IUserApiMapper;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UserAlreadyExistsException;
-import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.mappers.IUserApiMapper;
-import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.repositories.IUserApiRepository;
-import com.pragma.powerup.plazamicroservice.adapters.driven.userapi.entity.UserDto;
 import com.pragma.powerup.plazamicroservice.domain.dto.User;
 import com.pragma.powerup.plazamicroservice.domain.spi.IUserApiFeignPort;
 import feign.FeignException;
