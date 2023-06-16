@@ -43,7 +43,8 @@ public class MainSecurity {
                         .requestMatchers("/restaurant/{id}").hasAnyRole("ADMIN", "OWNER")
                         .requestMatchers("/dish/{id}", "/restaurant/new/employee", "/dish/{id}/active").hasRole("OWNER")
                         .requestMatchers("/restaurant").hasRole("CLIENT")
-                        .requestMatchers("/order").hasAnyRole("CLIENT", "EMPLOYEE")
+                        .requestMatchers("/order").hasRole("CLIENT")
+                        .requestMatchers("/order/assign", "/order/ready/{id}", "/order/deliver/{id}").hasRole("EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin().disable()
@@ -53,4 +54,5 @@ public class MainSecurity {
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 }

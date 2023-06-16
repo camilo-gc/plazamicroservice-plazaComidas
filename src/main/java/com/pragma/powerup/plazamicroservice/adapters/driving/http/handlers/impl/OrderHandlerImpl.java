@@ -58,4 +58,8 @@ public class OrderHandlerImpl implements IOrderHandler {
         return orderServicePort.orderReady(idOrder, token);
     }
 
+    public String deliverOrder(Long idOrder, String code, String token) {
+        return orderServicePort.deliverOrder(idOrder, code, token);
+    }
+
 }

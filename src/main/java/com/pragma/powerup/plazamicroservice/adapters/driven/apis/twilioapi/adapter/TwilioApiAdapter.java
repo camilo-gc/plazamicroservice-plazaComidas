@@ -2,8 +2,13 @@ package com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.adap
 
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.dto.SmsApiDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.dto.ValidCodeApiDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.mappers.ITwilioApiMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.repositories.ITwilioApiRepository;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UnauthorizedOwnerValidationException;
+import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.UserAlreadyExistsException;
+import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.spi.ITwilioApiFeignPort;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -79,6 +84,36 @@ public class TwilioApiAdapter implements ITwilioApiFeignPort {
 
         return responseEntity.getBody();
 
+    }
+
+
+    public Map<String, String> validateCodeVerification(String code, String phone, String authorizationHeader){
+
+        ValidCodeApiDto validCodeApiDto = new ValidCodeApiDto(code, phone);
+        ResponseEntity<Map<String, String>> responseEntity = null;
+
+        try {
+
+            responseEntity = twilioApiRepository.validCodeSms(validCodeApiDto, authorizationHeader);
+
+        } catch (FeignException e) {
+
+            if (e.status() == 401) {
+                log.error("401 -> Unauthorized");
+                throw new UnauthorizedOwnerValidationException();
+            }
+            if (e.status() == 500) {
+                log.error("500 -> TwilioApi internal error");
+                throw new HttpServerErrorException(HttpStatusCode.valueOf(e.status()));
+            }
+            if (e.status() == -1) {
+                log.error("-1 -> TwilioApi not available");
+                throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        }
+
+        return responseEntity.getBody();
     }
 
 }

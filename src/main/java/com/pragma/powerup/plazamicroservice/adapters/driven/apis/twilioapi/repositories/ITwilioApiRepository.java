@@ -1,6 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.repositories;
 
 import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.dto.SmsApiDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.dto.ValidCodeApiDto;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -17,5 +18,7 @@ public interface ITwilioApiRepository {
     @PostMapping("/notify/send-code")
     public ResponseEntity<Map<String, String>> sendCodeSms(@Valid @RequestBody SmsApiDto smsApiDto, @RequestHeader("Authorization") String token);
 
+    @PostMapping("/notify/valid-code")
+    public ResponseEntity<Map<String, String>> validCodeSms(@Valid @RequestBody ValidCodeApiDto validCodeApiDto, @RequestHeader("Authorization") String token);
 
 }

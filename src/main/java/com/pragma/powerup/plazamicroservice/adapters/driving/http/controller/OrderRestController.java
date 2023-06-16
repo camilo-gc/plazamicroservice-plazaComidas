@@ -1,5 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
+import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishActiveRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
@@ -94,10 +95,18 @@ public class OrderRestController {
     }
 
     @PutMapping("/ready/{id}")
-    public ResponseEntity<Map<String, String>> changeOrderStatusToReady( @PathVariable("id") Long idOrder, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Map<String, String>> changeOrderToReady( @PathVariable("id") Long idOrder, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
         return ResponseEntity.status(HttpStatus.OK).body(
                 Collections.singletonMap(Constants.SENT_CODE_STATUS_KEY, orderHandler.orderReady(idOrder, token))
+        );
+    }
+
+    @PutMapping("/deliver/{id}")
+    public ResponseEntity<Map<String, String>> changeOrderToDeliver( @PathVariable("id") Long idOrder, @RequestParam String codeVerification, @RequestHeader HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Collections.singletonMap(Constants.VERIFICATION_STATUS_KEY, orderHandler.deliverOrder(idOrder, codeVerification, token))
         );
     }
 

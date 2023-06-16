@@ -126,4 +126,27 @@ public class OrderUseCase implements IOrderServicePort {
 
     }
 
+    public String deliverOrder(Long idOrder, String code, String token) {
+
+        Order order = orderPersistencePort.findById(idOrder);
+
+        if (!order.getStatus().equals(Constants.ORDER_STATUS_READY)) {
+            throw new OrderIsNotReadyException();
+        }
+
+        User client = userApiFeignPort.findUserById(order.getIdClient(), token);
+
+        String status = twilioPersistencePort.validateCodeVerification( code , client.getPhone(), token )
+                .get(Constants.SENT_CODE_STATUS_KEY);
+
+        if (!status.equals(Constants.APPROVED_STATUS)) {
+            throw new SentCodeNotApprovedException();
+        }
+
+        order.setStatus(Constants.ORDER_STATUS_DELIVERED);
+        orderPersistencePort.saveOrder(order);
+
+        return status;
+    }
+
 }

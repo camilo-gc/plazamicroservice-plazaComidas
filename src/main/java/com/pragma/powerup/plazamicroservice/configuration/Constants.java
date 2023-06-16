@@ -59,7 +59,9 @@ public class Constants {
     public static final String ORDER_READY_MESSAGE = "Your order is ready";
 
     public static final String SENT_CODE_STATUS_KEY = "sent_code_status";
+    public static final String VERIFICATION_STATUS_KEY = "verification_status";
     public static final String APPROVED_STATUS = "approved";
     public static final String SENT_CODE_NOT_APPROVED_MESSAGE = "Sent code not approved";
+    public static final String ORDER_IS_NOT_READY = "Order is not ready";
 
 }

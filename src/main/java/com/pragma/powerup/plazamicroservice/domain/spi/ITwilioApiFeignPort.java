@@ -8,4 +8,5 @@ public interface ITwilioApiFeignPort {
 
     Map<String, String> sendCodeVerification(String message, String phone, String authorizationHeader);
 
+    Map<String, String> validateCodeVerification(String code, String phone, String authorizationHeader);
 }
