@@ -35,7 +35,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
             responseEntity = userApiRepository.findById( id, authorizationHeader );
 
         } catch ( FeignException e ){
-
+            log.error( "user api -> findUserById" );
             if ( e.status() == 401 ) {
                 log.error( "401 -> Find Unauthorized" );
                 throw new UnauthorizedOwnerValidationException();
@@ -69,7 +69,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
             responseEntity = userApiRepository.saveEmployee( userApiMapper.toUserDto(user), token );
 
         } catch ( FeignException e ){
-
+            log.error( "user api -> saveEmployee" );
             if ( e.status() == 401 ) {
                 log.error( "401 -> Unauthorized Creation" );
                 throw new UnauthorizedOwnerValidationException();

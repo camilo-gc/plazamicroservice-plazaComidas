@@ -158,11 +158,27 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, SENT_CODE_NOT_APPROVED_MESSAGE));
     }
 
+    @ExceptionHandler(OrderIsNotInPreparationException.class)
+    public ResponseEntity<Map<String, String>> handleOrderIsNotInPreparationException(
+            OrderIsNotInPreparationException orderIsNotInPreparationException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_NOT_IN_PREPARATION));
+    }
+
+    @ExceptionHandler(OrderIsNotPendingException.class)
+    public ResponseEntity<Map<String, String>> handleOrderIsNotPendingException(
+            OrderIsNotPendingException orderIsNotPendingException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_NOT_PENDING));
+    }
+
     @ExceptionHandler(OrderIsNotReadyException.class)
     public ResponseEntity<Map<String, String>> handleOrderIsNotReadyException(
             OrderIsNotReadyException orderIsNotReadyException) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_IS_NOT_READY));
     }
+
+
 
 }

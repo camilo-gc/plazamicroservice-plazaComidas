@@ -1,6 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
-import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.DishActiveRequestDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
@@ -94,19 +94,28 @@ public class OrderRestController {
 
     }
 
-    @PutMapping("/ready/{id}")
-    public ResponseEntity<Map<String, String>> changeOrderToReady( @PathVariable("id") Long idOrder, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/ready/{order_id}")
+    public ResponseEntity<Map<String, String>> changeOrderToReady( @PathVariable("order_id") Long orderId, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
         return ResponseEntity.status(HttpStatus.OK).body(
-                Collections.singletonMap(Constants.SENT_CODE_STATUS_KEY, orderHandler.orderReady(idOrder, token))
+                Collections.singletonMap( Constants.SENT_CODE_KEY, String.valueOf(orderHandler.orderReady(orderId, token)) )
         );
     }
 
-    @PutMapping("/deliver/{id}")
-    public ResponseEntity<Map<String, String>> changeOrderToDeliver( @PathVariable("id") Long idOrder, @RequestParam String codeVerification, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/deliver/{order_id}")
+    public ResponseEntity<Map<String, String>> changeOrderToDeliver(@PathVariable("order_id") Long idOrder, @RequestParam("verification_code") String verificationCode, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
         return ResponseEntity.status(HttpStatus.OK).body(
-                Collections.singletonMap(Constants.VERIFICATION_STATUS_KEY, orderHandler.deliverOrder(idOrder, codeVerification, token))
+                Collections.singletonMap(Constants.VERIFICATION_STATUS_KEY, orderHandler.deliverOrder(idOrder, verificationCode, token))
+        );
+    }
+
+    @PutMapping("/cancel/{order_id}")
+    public ResponseEntity<Map<String, String>> changeOrderToCancel( @PathVariable("order_id") Long idOrder, @RequestHeader HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
+        orderHandler.orderCanceled(idOrder, token);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCEL_MESSAGE)
         );
     }
 

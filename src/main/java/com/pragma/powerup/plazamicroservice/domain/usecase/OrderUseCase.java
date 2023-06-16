@@ -100,7 +100,7 @@ public class OrderUseCase implements IOrderServicePort {
 
     }
 
-    public String orderReady(Long idOrder, String token){
+    public boolean orderReady(Long idOrder, String token){
 
         Order order = orderPersistencePort.findById(idOrder);
 
@@ -112,17 +112,15 @@ public class OrderUseCase implements IOrderServicePort {
 
         order.setStatus(Constants.ORDER_STATUS_READY);
         orderPersistencePort.saveOrder(order);
-        String status = twilioPersistencePort.sendCodeVerification(
-                        Constants.ORDER_READY_MESSAGE ,
-                        client.getPhone(),
-                        token
-                ).get(Constants.SENT_CODE_STATUS_KEY);
 
-        if (!status.equals(Constants.APPROVED_STATUS)) {
-            throw new SentCodeNotApprovedException();
-        }
 
-        return status;
+        twilioPersistencePort.sendCodeVerification(
+                Constants.ORDER_READY_MESSAGE,
+                client.getPhone(),
+                token
+        );
+
+        return true;
 
     }
 
@@ -137,7 +135,7 @@ public class OrderUseCase implements IOrderServicePort {
         User client = userApiFeignPort.findUserById(order.getIdClient(), token);
 
         String status = twilioPersistencePort.validateCodeVerification( code , client.getPhone(), token )
-                .get(Constants.SENT_CODE_STATUS_KEY);
+                .get(Constants.VERIFICATION_STATUS_KEY);
 
         if (!status.equals(Constants.APPROVED_STATUS)) {
             throw new SentCodeNotApprovedException();
@@ -147,6 +145,22 @@ public class OrderUseCase implements IOrderServicePort {
         orderPersistencePort.saveOrder(order);
 
         return status;
+    }
+
+    public void orderCanceled(Long idOrder, String token){
+
+        Order order = orderPersistencePort.findById(idOrder);
+
+        if (!order.getStatus().equals(Constants.ORDER_STATUS_PENDING)) {
+            throw new OrderIsNotPendingException();
+        }
+
+        User client = userApiFeignPort.findUserById(order.getIdClient(), token);
+
+        order.setStatus(Constants.ORDER_STATUS_CANCELED);
+        orderPersistencePort.saveOrder(order);
+        twilioPersistencePort.notifyOrderStatus( Constants.ORDER_CANCEL_MESSAGE, client.getPhone(), token );
+
     }
 
 }

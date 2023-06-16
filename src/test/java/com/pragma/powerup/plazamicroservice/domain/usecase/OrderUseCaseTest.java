@@ -9,10 +9,7 @@ import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
 import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderListEmptyException;
 import com.pragma.powerup.plazamicroservice.domain.model.*;
-import com.pragma.powerup.plazamicroservice.domain.spi.IEmployeePersistencePort;
-import com.pragma.powerup.plazamicroservice.domain.spi.IJwtProviderConfigurationPort;
-import com.pragma.powerup.plazamicroservice.domain.spi.IOrderDishPersistencePort;
-import com.pragma.powerup.plazamicroservice.domain.spi.IOrderPersistencePort;
+import com.pragma.powerup.plazamicroservice.domain.spi.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +32,8 @@ class OrderUseCaseTest {
     private IOrderPersistencePort orderPersistencePort;
     private IOrderDishPersistencePort orderDishPersistencePort;
     private IEmployeePersistencePort employeePersistencePort;
+    private IUserApiFeignPort userApiFeignPort;
+    private ITwilioApiFeignPort twilioApiFeignPort;
     private IJwtProviderConfigurationPort jwtProviderConfigurationPort;
     private IOrderServicePort orderServicePort;
 
@@ -43,8 +42,16 @@ class OrderUseCaseTest {
         this.orderPersistencePort = mock(IOrderPersistencePort.class);
         this.orderDishPersistencePort = mock(IOrderDishPersistencePort.class);
         this.employeePersistencePort = mock(IEmployeePersistencePort.class);
+        this.userApiFeignPort = mock(IUserApiFeignPort.class);
+        this.twilioApiFeignPort = mock(ITwilioApiFeignPort.class);
         this.jwtProviderConfigurationPort = mock(IJwtProviderConfigurationPort.class);
-        this.orderServicePort = new OrderUseCase(orderPersistencePort, orderDishPersistencePort, employeePersistencePort, jwtProviderConfigurationPort);
+        this.orderServicePort = new OrderUseCase(
+                orderPersistencePort,
+                orderDishPersistencePort,
+                employeePersistencePort,
+                userApiFeignPort,
+                twilioApiFeignPort,
+                jwtProviderConfigurationPort);
     }
 
 

@@ -54,7 +54,8 @@ public class OrderHandlerImpl implements IOrderHandler {
         );
     }
 
-    public String orderReady(Long idOrder, String token) {
+    @Transactional
+    public boolean orderReady(Long idOrder, String token) {
         return orderServicePort.orderReady(idOrder, token);
     }
 
@@ -62,4 +63,7 @@ public class OrderHandlerImpl implements IOrderHandler {
         return orderServicePort.deliverOrder(idOrder, code, token);
     }
 
+    public void orderCanceled(Long idOrder, String token) {
+        orderServicePort.orderCanceled(idOrder, token);
+    }
 }

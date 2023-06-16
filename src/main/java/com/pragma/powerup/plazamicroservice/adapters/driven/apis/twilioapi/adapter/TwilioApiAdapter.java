@@ -37,7 +37,7 @@ public class TwilioApiAdapter implements ITwilioApiFeignPort {
             twilioApiRepository.notifyOrderStatus(smsApiDto, authorizationHeader);
 
         } catch (FeignException e) {
-
+            log.error( "twilio -> notifyOrderStatus" );
             if (e.status() == 401) {
                 log.error("401 -> Unauthorized");
                 throw new UnauthorizedOwnerValidationException();
@@ -66,7 +66,7 @@ public class TwilioApiAdapter implements ITwilioApiFeignPort {
             responseEntity = twilioApiRepository.sendCodeSms(smsApiDto, authorizationHeader);
 
         } catch (FeignException e) {
-
+            log.error( "twilio -> sendCodeVerification" );
             if (e.status() == 401) {
                 log.error("401 -> Unauthorized");
                 throw new UnauthorizedOwnerValidationException();
@@ -97,7 +97,7 @@ public class TwilioApiAdapter implements ITwilioApiFeignPort {
             responseEntity = twilioApiRepository.validCodeSms(validCodeApiDto, authorizationHeader);
 
         } catch (FeignException e) {
-
+            log.error( "twilio -> validateCodeVerification" );
             if (e.status() == 401) {
                 log.error("401 -> Unauthorized");
                 throw new UnauthorizedOwnerValidationException();

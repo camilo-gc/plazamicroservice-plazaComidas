@@ -15,8 +15,11 @@ public interface IOrderServicePort {
 
     List<Order> assignToOrder(List<Order> idOrders, String token);
 
-    String orderReady(Long idOrder, String token);
+    boolean orderReady(Long idOrder, String token);
 
     String deliverOrder(Long idOrder, String code, String token);
+
+    void orderCanceled(Long idOrder, String token);
+
 
 }
