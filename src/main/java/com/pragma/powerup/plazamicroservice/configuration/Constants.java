@@ -56,4 +56,10 @@ public class Constants {
 
     public static final String ORDER_NOT_FOUND_MESSAGE = "Order not found";
     public static final String ORDER_LIST_EMPTY_MESSAGE = "one of the dishes not belong to the restaurant";
+    public static final String ORDER_READY_MESSAGE = "Your order is ready";
+
+    public static final String SENT_CODE_STATUS_KEY = "sent_code_status";
+    public static final String APPROVED_STATUS = "approved";
+    public static final String SENT_CODE_NOT_APPROVED_MESSAGE = "Sent code not approved";
+
 }

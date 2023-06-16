@@ -1,6 +1,6 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.repositories;
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity.UserDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.dto.UserApiDto;
 import jakarta.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 public interface IUserApiRepository {
 
     @GetMapping("/user/{id}")
-    ResponseEntity<UserDto> findById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token);
+    ResponseEntity<UserApiDto> findById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token);
 
     @PostMapping("/user/new/employee")
-    ResponseEntity<UserDto> saveEmployee(@Valid @RequestBody UserDto userDto, @RequestHeader("Authorization") String token);
+    ResponseEntity<UserApiDto> saveEmployee(@Valid @RequestBody UserApiDto userApiDto, @RequestHeader("Authorization") String token);
 
 }

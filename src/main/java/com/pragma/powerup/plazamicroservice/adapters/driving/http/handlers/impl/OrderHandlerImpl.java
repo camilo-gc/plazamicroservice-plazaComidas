@@ -13,6 +13,7 @@ import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,12 +47,15 @@ public class OrderHandlerImpl implements IOrderHandler {
         );
     }
 
+    @Transactional
     public List<OrderResponseDto> assignToOrder(List<OrderUpdateRequestDto> orderUpdateRequestDtoList, String token){
         return orderResponseMapper.toResponseList(
                 orderServicePort.assignToOrder(orderUpdateRequestMapper.toOrderList(orderUpdateRequestDtoList), token)
         );
     }
 
-
+    public String orderReady(Long idOrder, String token) {
+        return orderServicePort.orderReady(idOrder, token);
+    }
 
 }

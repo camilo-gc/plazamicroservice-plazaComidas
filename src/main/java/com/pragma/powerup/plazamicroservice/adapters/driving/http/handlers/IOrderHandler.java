@@ -15,4 +15,7 @@ public interface IOrderHandler {
     List<OrderResponseDto> getOrderOfRestaurantByStatus(String token, String status, Pageable pageable);
 
     List<OrderResponseDto> assignToOrder(List<OrderUpdateRequestDto> orderUpdateRequestDtoList, String token);
+
+    String orderReady(Long idOrder, String token);
+
 }

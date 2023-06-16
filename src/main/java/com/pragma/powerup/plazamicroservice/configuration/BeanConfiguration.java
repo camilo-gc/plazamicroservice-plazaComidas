@@ -1,5 +1,7 @@
 package com.pragma.powerup.plazamicroservice.configuration;
 
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.adapter.TwilioApiAdapter;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.twilioapi.repositories.ITwilioApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.adapter.*;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.mappers.*;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.repositories.*;
@@ -35,7 +37,7 @@ public class BeanConfiguration {
     private final IOrderDishRepository orderDishRepository;
     private final IOrderEntityMapper orderEntityMapper;
     private final IOrderDishEntityMapper orderDishEntityMapper;
-
+    private final ITwilioApiRepository twilioApiRepository;
 
     @Bean
     public IRestaurantServicePort restaurantServicePort() {
@@ -69,7 +71,7 @@ public class BeanConfiguration {
 
     @Bean
     public IOrderServicePort orderServicePort() {
-        return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), employeePersistencePort(), jwtProviderConfigurationPort);
+        return new OrderUseCase(orderPersistencePort(), orderDishPersistencePort(), employeePersistencePort(), userApiPersistencePort(), twilioPersistencePort(), jwtProviderConfigurationPort);
     }
 
     @Bean
@@ -80,6 +82,11 @@ public class BeanConfiguration {
     @Bean
     public IOrderDishPersistencePort orderDishPersistencePort() {
         return new OrderDishMysqlAdapter(orderDishRepository, orderDishEntityMapper, dishRepository);
+    }
+
+    @Bean
+    public ITwilioApiFeignPort twilioPersistencePort(){
+        return new TwilioApiAdapter(twilioApiRepository);
     }
 
 }

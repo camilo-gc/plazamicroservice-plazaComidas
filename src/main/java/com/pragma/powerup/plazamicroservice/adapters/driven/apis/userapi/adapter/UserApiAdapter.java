@@ -1,7 +1,7 @@
 package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.adapter;
 
 
-import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity.UserDto;
+import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.dto.UserApiDto;
 import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.mappers.IUserApiMapper;
 import com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.repositories.IUserApiRepository;
 import com.pragma.powerup.plazamicroservice.adapters.driven.jpa.mysql.exceptions.OwnerNotFoundException;
@@ -28,7 +28,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
     @Override
     public User findUserById(Long id, String authorizationHeader) {
 
-        ResponseEntity<UserDto> responseEntity = null;
+        ResponseEntity<UserApiDto> responseEntity = null;
 
         try {
 
@@ -62,7 +62,7 @@ public class UserApiAdapter implements IUserApiFeignPort {
     @Override
     public User saveEmployee(User user, String token){
 
-        ResponseEntity<UserDto> responseEntity = null;
+        ResponseEntity<UserApiDto> responseEntity = null;
 
         try {
 

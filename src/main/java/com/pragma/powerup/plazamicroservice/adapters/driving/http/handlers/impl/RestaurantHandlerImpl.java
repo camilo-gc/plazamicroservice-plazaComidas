@@ -11,6 +11,7 @@ import com.pragma.powerup.plazamicroservice.domain.api.IRestaurantServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class RestaurantHandlerImpl implements IRestaurantHandler {
     }
 
     @Override
+    @Transactional
     public void addEmployeeToRestaurant(UserRequestDto userRequestDto, String token) {
         restaurantServicePort.addEmployeeToRestaurant(
                 Long.valueOf(userRequestDto.getId_restaurant()),

@@ -1,11 +1,11 @@
-package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.entity;
+package com.pragma.powerup.plazamicroservice.adapters.driven.apis.userapi.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserDto {
+public class UserApiDto {
 
     private Long id;
     private String name;

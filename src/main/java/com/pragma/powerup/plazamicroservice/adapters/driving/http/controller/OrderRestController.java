@@ -30,7 +30,7 @@ import java.util.Objects;
 @SecurityRequirement(name = "jwt")
 public class OrderRestController {
 
-    private final IOrderHandler restaurantHandler;
+    private final IOrderHandler orderHandler;
 
     @Operation(summary = "Add a new order",
             responses = {
@@ -44,7 +44,7 @@ public class OrderRestController {
     public ResponseEntity<Map<String, String>> saveOrder(@Valid @RequestBody OrderRequestDto orderRequestDto,
                                                               @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);
-        restaurantHandler.saveOrder(orderRequestDto, token);
+        orderHandler.saveOrder(orderRequestDto, token);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CREATED_MESSAGE));
 
@@ -66,7 +66,7 @@ public class OrderRestController {
 
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);
         return ResponseEntity.ok(
-                restaurantHandler.getOrderOfRestaurantByStatus(token, status,
+                orderHandler.getOrderOfRestaurantByStatus(token, status,
                         PageRequest.of( page-1, size )
                 )
         );
@@ -88,9 +88,17 @@ public class OrderRestController {
 
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0).substring(7);
         return ResponseEntity.ok(
-                restaurantHandler.assignToOrder( orderUpdateRequestDtoList, token)
+                orderHandler.assignToOrder( orderUpdateRequestDtoList, token)
         );
 
+    }
+
+    @PutMapping("/ready/{id}")
+    public ResponseEntity<Map<String, String>> changeOrderStatusToReady( @PathVariable("id") Long idOrder, @RequestHeader HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Collections.singletonMap(Constants.SENT_CODE_STATUS_KEY, orderHandler.orderReady(idOrder, token))
+        );
     }
 
 }

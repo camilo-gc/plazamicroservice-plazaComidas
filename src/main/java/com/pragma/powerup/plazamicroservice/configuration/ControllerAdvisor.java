@@ -151,4 +151,11 @@ public class ControllerAdvisor {
                 .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, ORDER_LIST_EMPTY_MESSAGE));
     }
 
+    @ExceptionHandler(SentCodeNotApprovedException.class)
+    public ResponseEntity<Map<String, String>> handleSentCodeNotApprovedException(
+            SentCodeNotApprovedException sentCodeNotApprovedException) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Collections.singletonMap(RESPONSE_ERROR_MESSAGE_KEY, SENT_CODE_NOT_APPROVED_MESSAGE));
+    }
+
 }

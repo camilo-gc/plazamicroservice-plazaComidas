@@ -3,8 +3,8 @@ package com.pragma.powerup.plazamicroservice.domain.usecase;
 
 import com.pragma.powerup.plazamicroservice.configuration.Constants;
 import com.pragma.powerup.plazamicroservice.domain.api.IOrderServicePort;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderInProcessException;
-import com.pragma.powerup.plazamicroservice.domain.exceptions.OrderListEmptyException;
+import com.pragma.powerup.plazamicroservice.domain.dto.User;
+import com.pragma.powerup.plazamicroservice.domain.exceptions.*;
 import com.pragma.powerup.plazamicroservice.domain.model.Employee;
 import com.pragma.powerup.plazamicroservice.domain.model.Order;
 import com.pragma.powerup.plazamicroservice.domain.model.OrderDish;
@@ -22,15 +22,21 @@ public class OrderUseCase implements IOrderServicePort {
     private final IOrderPersistencePort orderPersistencePort;
     private final IOrderDishPersistencePort orderDishPersistencePort;
     private final IEmployeePersistencePort employeePersistencePort;
+    private final IUserApiFeignPort userApiFeignPort;
+    private final ITwilioApiFeignPort twilioPersistencePort;
     private final IJwtProviderConfigurationPort jwtProviderConfigurationPort;
 
     public OrderUseCase(IOrderPersistencePort orderPersistencePort,
                         IOrderDishPersistencePort orderDishPersistencePort,
                         IEmployeePersistencePort employeePersistencePort,
+                        IUserApiFeignPort userApiFeignPort,
+                        ITwilioApiFeignPort twilioPersistencePort,
                         IJwtProviderConfigurationPort jwtProviderConfigurationPort) {
         this.orderPersistencePort = orderPersistencePort;
         this.orderDishPersistencePort = orderDishPersistencePort;
         this.employeePersistencePort = employeePersistencePort;
+        this.userApiFeignPort = userApiFeignPort;
+        this.twilioPersistencePort = twilioPersistencePort;
         this.jwtProviderConfigurationPort = jwtProviderConfigurationPort;
     }
 
@@ -68,7 +74,6 @@ public class OrderUseCase implements IOrderServicePort {
         return orderPersistencePort.findOrderOfRestaurantByStatus(idRestaurant, status, pageable);
     }
 
-    @Transactional
     public List<Order> assignToOrder(List<Order> orderList, String token) {
 
         if (orderList.isEmpty()) {
@@ -92,6 +97,32 @@ public class OrderUseCase implements IOrderServicePort {
         }
 
         return orderListUpdated;
+
+    }
+
+    public String orderReady(Long idOrder, String token){
+
+        Order order = orderPersistencePort.findById(idOrder);
+
+        if (!order.getStatus().equals(Constants.ORDER_STATUS_PREPARATION)) {
+            throw new OrderIsNotInPreparationException();
+        }
+
+        User client = userApiFeignPort.findUserById(order.getIdClient(), token);
+
+        order.setStatus(Constants.ORDER_STATUS_READY);
+        orderPersistencePort.saveOrder(order);
+        String status = twilioPersistencePort.sendCodeVerification(
+                        Constants.ORDER_READY_MESSAGE ,
+                        client.getPhone(),
+                        token
+                ).get(Constants.SENT_CODE_STATUS_KEY);
+
+        if (!status.equals(Constants.APPROVED_STATUS)) {
+            throw new SentCodeNotApprovedException();
+        }
+
+        return status;
 
     }
 
