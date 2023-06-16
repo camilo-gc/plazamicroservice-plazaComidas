@@ -110,4 +110,13 @@ public class OrderRestController {
         );
     }
 
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<Map<String, String>> changeOrderToCancel( @PathVariable("id") Long idOrder, @RequestHeader HttpHeaders headers) {
+        String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
+        orderHandler.orderCanceled(idOrder, token);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCEL_MESSAGE)
+        );
+    }
+
 }

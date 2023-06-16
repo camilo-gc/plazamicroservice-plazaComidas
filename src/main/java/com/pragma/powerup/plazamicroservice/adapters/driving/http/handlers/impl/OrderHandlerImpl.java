@@ -62,4 +62,7 @@ public class OrderHandlerImpl implements IOrderHandler {
         return orderServicePort.deliverOrder(idOrder, code, token);
     }
 
+    public void orderCanceled(Long idOrder, String token) {
+        orderServicePort.orderReady(idOrder, token);
+    }
 }

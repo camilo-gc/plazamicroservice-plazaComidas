@@ -19,4 +19,7 @@ public interface IOrderServicePort {
 
     String deliverOrder(Long idOrder, String code, String token);
 
+    void orderCanceled(Long idOrder, String token);
+
+
 }

@@ -7,10 +7,7 @@ public class Constants {
         throw new IllegalStateException("Utility class");
     }
 
-    public static final Long ADMIN_ROLE_ID = 1L;
     public static final Long OWNER_ROLE_ID = 2L;
-    public static final Long EMPLOYEE_ROLE_ID = 3L;
-    public static final Long CLIENT_ROLE_ID = 4L;
     public static final String RESPONSE_MESSAGE_KEY = "message";
     public static final String RESTAURANT_CREATED_MESSAGE = "Restaurant created successfully";
     public static final String RESPONSE_ERROR_MESSAGE_KEY = "error";
@@ -63,5 +60,7 @@ public class Constants {
     public static final String APPROVED_STATUS = "approved";
     public static final String SENT_CODE_NOT_APPROVED_MESSAGE = "Sent code not approved";
     public static final String ORDER_IS_NOT_READY = "Order is not ready";
+
+    public static final String ORDER_CANCEL_MESSAGE = "your order was canceled";
 
 }

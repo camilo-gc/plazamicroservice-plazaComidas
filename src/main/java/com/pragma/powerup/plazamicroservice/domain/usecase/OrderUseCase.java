@@ -149,4 +149,20 @@ public class OrderUseCase implements IOrderServicePort {
         return status;
     }
 
+    public void orderCanceled(Long idOrder, String token){
+
+        Order order = orderPersistencePort.findById(idOrder);
+
+        if (!order.getStatus().equals(Constants.ORDER_STATUS_PENDING)) {
+            throw new OrderIsNotInPreparationException();
+        }
+
+        User client = userApiFeignPort.findUserById(order.getIdClient(), token);
+
+        order.setStatus(Constants.ORDER_STATUS_CANCELED);
+        orderPersistencePort.saveOrder(order);
+        twilioPersistencePort.notifyOrderStatus( Constants.ORDER_CANCEL_MESSAGE, client.getPhone(), token );
+
+    }
+
 }
