@@ -28,7 +28,7 @@ jobs:
     - name: Run tests
       run: |
         chmod +x ./gradlew
-        ./gradlew test
+        ./gradlew test --no-daemon
       
 #   - name: Build and push Docker images
 #      uses: docker/build-push-action@v4.1.1
