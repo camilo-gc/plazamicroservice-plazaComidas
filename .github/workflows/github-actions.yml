@@ -20,7 +20,7 @@ jobs:
         distribution: temurin
         
     - name: Build with Gradle
-      run: chmod +x ./gradlew build --no-daemon
+      uses: gradle/gradle-build-action@v2.4.2
         
     - name: Run tests
       run: chmod +x ./gradlew test --no-daemon
