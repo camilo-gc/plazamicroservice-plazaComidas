@@ -23,7 +23,9 @@ jobs:
       uses: gradle/gradle-build-action@v2.4.2
         
     - name: Run tests
-      run: chmod +x ./gradlew test
+      run: |
+        chmod +x ./gradlew
+        ./gradlew test
       
 #   - name: Build and push Docker images
 #      uses: docker/build-push-action@v4.1.1
