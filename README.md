@@ -492,3 +492,5 @@ Please note that some endpoints require authentication. You should include the a
 ## Tests
 
 - Right-click the test folder and choose Run tests with coverage
+
+prueba github-actions
