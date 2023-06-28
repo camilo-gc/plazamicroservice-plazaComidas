@@ -4,9 +4,6 @@ on:
   push:
     branches: [ "cloud-devops" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
@@ -23,7 +20,9 @@ jobs:
         distribution: temurin
         
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2.4.2
+      uses: |
+        chmod +x ./gradlew
+        ./gradlew build --no-daemon
         
     - name: Run tests
       run: |
