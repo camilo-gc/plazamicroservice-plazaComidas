@@ -30,7 +30,7 @@ jobs:
         distribution: temurin
         
     - name: Build with Gradle
-      run: ./gradlew build
+      uses: gradle/gradle-build-action@v2.4.2
         
     - name: Run tests
       run: ./gradlew test
