@@ -40,3 +40,5 @@ jobs:
       with:
         username: ${{ secrets.USERNAME_DOCKER }}
         password: ${{ secrets.PASSWORD_DOCKER }}
+        repository: ${{ github.repository }}
+        tag_with_ref: true
