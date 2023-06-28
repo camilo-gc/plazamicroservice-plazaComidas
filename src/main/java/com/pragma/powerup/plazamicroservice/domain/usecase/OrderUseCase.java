@@ -99,7 +99,7 @@ public class OrderUseCase implements IOrderServicePort {
         return orderListUpdated;
 
     }
-
+/*
     public boolean orderReady(Long idOrder, String token){
 
         Order order = orderPersistencePort.findById(idOrder);
@@ -161,6 +161,6 @@ public class OrderUseCase implements IOrderServicePort {
         orderPersistencePort.saveOrder(order);
         twilioPersistencePort.notifyOrderStatus( Constants.ORDER_CANCEL_MESSAGE, client.getPhone(), token );
 
-    }
+    }*/
 
 }

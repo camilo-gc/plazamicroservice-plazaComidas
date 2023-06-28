@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion" : "1",
+  "Image" : {
+    "Name": "kracko/plazamicroservice:v0.9.2"
+  },
+  "Ports" : [
+    {
+      "HostPort": 8091,
+      "ContainerPort": 8091
+    }
+  ]
+}

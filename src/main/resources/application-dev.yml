@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost/plaza-powerup
-    username: root
-    password: "1234"
+    url: jdbc:mysql://${URL_DB_ENV}/plaza-powerup     #jdbc:mysql://plaza-comidas.ctnbmskaev1q.us-east-1.rds.amazonaws.com/plaza-powerup
+    username: ${USERNAME_DB_ENV}                      #admin
+    password: ${PASSWORD_DB_ENV}                      #"#Pr4gm4*"
   jpa:
     hibernate:
       ddl-auto: update

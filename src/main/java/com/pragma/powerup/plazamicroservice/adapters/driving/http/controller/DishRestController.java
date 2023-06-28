@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/dish")
 @AllArgsConstructor
-@SecurityRequirement(name = "jwt")
+//@SecurityRequirement(name = "jwt")
 public class DishRestController {
 
     private final IDishHandler dishHandler;
@@ -101,6 +101,5 @@ public class DishRestController {
         );
 
     }
-
 
 }

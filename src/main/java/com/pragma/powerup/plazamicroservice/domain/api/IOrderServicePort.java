@@ -14,12 +14,14 @@ public interface IOrderServicePort {
     List<Order> getOrdersOfRestaurantByStatus(String token, String status, Pageable pageable);
 
     List<Order> assignToOrder(List<Order> idOrders, String token);
+/*
 
     boolean orderReady(Long idOrder, String token);
 
     String deliverOrder(Long idOrder, String code, String token);
 
     void orderCanceled(Long idOrder, String token);
+*/
 
 
 }

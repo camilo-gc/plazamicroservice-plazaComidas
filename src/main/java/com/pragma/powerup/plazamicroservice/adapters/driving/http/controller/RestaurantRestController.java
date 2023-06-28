@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
@@ -28,10 +29,11 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/restaurant")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "jwt")
+@CommonsLog
+//@SecurityRequirement(name = "jwt")
 public class RestaurantRestController {
     private final IRestaurantHandler restaurantHandler;
-
+    /*
     @Operation(summary = "Add a new restaurant",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Restaurant created",
@@ -58,14 +60,13 @@ public class RestaurantRestController {
                     @ApiResponse(responseCode = "403", description = "Role not allowed for user creation",
                             content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PostMapping("/new/employee")
-    @SecurityRequirement(name = "jwt")
     public ResponseEntity<Map<String, String>> addEmployeeToRestaurant(@Valid @RequestBody UserRequestDto userRequestDto,
                                                             @RequestHeader HttpHeaders headers) {
         restaurantHandler.addEmployeeToRestaurant(userRequestDto, headers.get("Authorization").get(0));
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.EMPLOYEE_CREATED_MESSAGE));
     }
-
+    */
     @Operation(summary = "Get all the restaurants",
             responses = {
                     @ApiResponse(responseCode = "200", description = "All restaurants returned",
@@ -76,6 +77,9 @@ public class RestaurantRestController {
     @GetMapping("")
     public ResponseEntity<List<RestaurantNewResponseDto>> getAllRestaurants(@RequestParam(defaultValue = "1") Integer page,
                                                                              @RequestParam(defaultValue = "10") Integer size) {
+        log.info("url_env: " + System.getenv("URL_DB_ENV"));
+        log.info("username_env: " + System.getenv("USERNAME_DB_ENV"));
+        log.info("password_env: " + System.getenv("PASSWORD_DB_ENV"));
         return ResponseEntity.ok(
                 restaurantHandler.getAllRestaurants(
                         PageRequest.of( page-1, size, Sort.by(Sort.Direction.ASC, "name") )

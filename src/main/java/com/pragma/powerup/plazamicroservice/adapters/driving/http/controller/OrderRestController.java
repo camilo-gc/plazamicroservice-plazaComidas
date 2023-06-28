@@ -1,6 +1,5 @@
 package com.pragma.powerup.plazamicroservice.adapters.driving.http.controller;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.request.OrderUpdateRequestDto;
 import com.pragma.powerup.plazamicroservice.adapters.driving.http.dto.response.OrderResponseDto;
@@ -28,7 +27,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "jwt")
+//@SecurityRequirement(name = "jwt")
 public class OrderRestController {
 
     private final IOrderHandler orderHandler;
@@ -93,7 +92,15 @@ public class OrderRestController {
         );
 
     }
-
+    /*
+    @Operation(summary = "Order ready",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order ready",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Bad Request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/ready/{order_id}")
     public ResponseEntity<Map<String, String>> changeOrderToReady( @PathVariable("order_id") Long orderId, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
@@ -102,6 +109,14 @@ public class OrderRestController {
         );
     }
 
+    @Operation(summary = "Order delivered",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order delivered",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Bad Request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/deliver/{order_id}")
     public ResponseEntity<Map<String, String>> changeOrderToDeliver(@PathVariable("order_id") Long idOrder, @RequestParam("verification_code") String verificationCode, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
@@ -110,6 +125,14 @@ public class OrderRestController {
         );
     }
 
+    @Operation(summary = "Order canceled",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Order canceled",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Map"))),
+                    @ApiResponse(responseCode = "404", description = "Order not found",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error"))),
+                    @ApiResponse(responseCode = "409", description = "Bad Request",
+                            content = @Content(mediaType = "application/json", schema = @Schema(ref = "#/components/schemas/Error")))})
     @PutMapping("/cancel/{order_id}")
     public ResponseEntity<Map<String, String>> changeOrderToCancel( @PathVariable("order_id") Long idOrder, @RequestHeader HttpHeaders headers) {
         String token = Objects.requireNonNull(headers.get("Authorization")).get(0);
@@ -118,5 +141,5 @@ public class OrderRestController {
                 Collections.singletonMap(Constants.RESPONSE_MESSAGE_KEY, Constants.ORDER_CANCEL_MESSAGE)
         );
     }
-
+    */
 }
