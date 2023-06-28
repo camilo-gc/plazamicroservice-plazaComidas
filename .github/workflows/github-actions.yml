@@ -5,11 +5,11 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: build, push and deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "cloud-devops" ]
 
 permissions:
   contents: read
@@ -32,13 +32,15 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2.4.2
         
-#    - name: Run tests
-#      run: ./gradlew test
+    - name: Run tests
+      run: |
+        chmod +x ./gradlew
+        ./gradlew test
       
-    - name: Build and push Docker images
-      uses: docker/build-push-action@v4.1.1
-      with:
-        username: ${{ secrets.USERNAME_DOCKER }}
-        password: ${{ secrets.PASSWORD_DOCKER }}
-        repository: ${{ github.repository }}
-        tag_with_ref: true
+#    - name: Build and push Docker images
+#      uses: docker/build-push-action@v4.1.1
+#      with:
+#        username: ${{ secrets.USERNAME_DOCKER }}
+#        password: ${{ secrets.PASSWORD_DOCKER }}
+#        repository: ${{ github.repository }}
+#        tag_with_ref: true
