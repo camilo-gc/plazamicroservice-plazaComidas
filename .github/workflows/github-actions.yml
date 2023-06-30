@@ -19,8 +19,11 @@ jobs:
         java-version: '17'
         distribution: temurin
         
+#    - name: Build with Gradle
+#     uses: gradle/gradle-build-action@v2.4.2
+    
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2.4.2
+      run:  ./gradlew clean build
         
     - name: Run tests
       run: |
