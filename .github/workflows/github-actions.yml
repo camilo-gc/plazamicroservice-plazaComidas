@@ -17,15 +17,10 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: temurin
+        distribution: alphine
         
-#    - name: Build with Gradle
-#     uses: gradle/gradle-build-action@v2.4.2
-    
     - name: Build with Gradle
-      run:  |
-        chmod +x ./gradlew
-        ./gradlew clean build
+      uses: gradle/gradle-build-action@v2.4.2
         
     - name: Run tests
       run: |
